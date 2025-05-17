@@ -121,7 +121,7 @@ public class GridApplication extends Application {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 Region cell = new Region();
-                cell.setStyle("-fx-border-color: black; -fx-background-color: lightgray;");
+                cell.setStyle("-fx-border-color: black; -fx-background-color: white;");
 
                 // square pls
                 cell.prefWidthProperty().bind(Bindings.min(
