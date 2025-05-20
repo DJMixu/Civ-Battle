@@ -1,11 +1,11 @@
 package com.example.civbattle;
 
 abstract class Jednostka extends Obiekt {
-    int życie;
+    int zycie;
 
-    public Jednostka(int id, int[] pozycja, int życie) {
+    public Jednostka(int id, int[] pozycja) {
         super(id, pozycja);
-        this.życie = życie;
+        this.zycie = 10;
     }
 
     abstract void ruch();

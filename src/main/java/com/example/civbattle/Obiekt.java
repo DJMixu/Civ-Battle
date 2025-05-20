@@ -1,7 +1,6 @@
 package com.example.civbattle;
 
 import java.util.List;
-
 class Obiekt {
     int id;
     int[] pozycja;
