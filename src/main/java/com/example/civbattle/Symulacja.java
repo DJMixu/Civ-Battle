@@ -35,6 +35,14 @@ public class Symulacja {
         this(20, 20, 3, "defaultSeed");
     }
 
+    public int krokSymulacji(){
+        for (Cywilizacja cywilizacja : listaCywilizacji) {
+
+        }
+
+        return 1;
+    }
+
     public int startSymulacji(int pX, int pY, int plCywilizacji, String pSeed) {
         if (plCywilizacji > 9) {
             System.out.println("Maksymlanie 9 cywilizacji");
@@ -46,7 +54,7 @@ public class Symulacja {
         iSymulacjaY = pY;
         iLiczbaCywilizacji = plCywilizacji;
         plansza = new Plansza(iSymulacjaX, iSymulacjaY);
-        listaCywilizacji = new Cywilizacja[iLiczbaCywilizacji];
+        listaCywilizacji = new Cywilizacja[(iLiczbaCywilizacji+1)];
         generujStart();
         System.out.println("XXX");
         plansza.wypisz();
@@ -84,6 +92,13 @@ public class Symulacja {
             listaCywilizacji[i].dodajJednostkę(new Wojownik(2, (pozycja.x), pozycja.y < iSymulacjaY / 2 ? pozycja.y + 1 : pozycja.y - 1));
             plansza.dodajJednostki(listaCywilizacji[i].jednostki);
         }
+        listaCywilizacji[iLiczbaCywilizacji] = new Cywilizacja(9);
+        for (int i = 0; i < iLiczbaCywilizacji; i++) {
+            Point pozycja = generujPozycje();
+            System.out.println("Wygenerowane pozycje barbazynca " + i);
+            listaCywilizacji[iLiczbaCywilizacji].dodajJednostkę(new Barbarzynca(i, pozycja));
+            plansza.dodajJednostki(listaCywilizacji[iLiczbaCywilizacji].jednostki);
+        }
         System.out.println("Koniec generowania cywilizacji");
         int liczbaSurowcow = iSymulacjaX * iSymulacjaY / 5;
         for (int i = 0; i < liczbaSurowcow; i++) {
@@ -92,6 +107,7 @@ public class Symulacja {
             plansza.dodajObiekt(pozycja, sur);
             System.out.print(i + ";");
         }
+
 
     }
 

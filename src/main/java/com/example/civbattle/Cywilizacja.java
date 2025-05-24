@@ -6,7 +6,7 @@ import java.util.List;
 
 class Cywilizacja {
     private String[] nazwyCywilizacji = {
-            "Egipt", "Rzym", "Grecja", "Chiny", "Persja", "Majowie", "Wikingowie", "Japonia"
+            "Egipt", "Rzym", "Grecja", "Chiny", "Persja", "Majowie", "Wikingowie", "Japonia" , "Polska" , "Barbażyńcy"
     };
     public int idCywilizacji;
     public String nameCywilizacji;

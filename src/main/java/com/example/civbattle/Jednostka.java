@@ -4,11 +4,16 @@ import java.awt.*;
 
 abstract class Jednostka extends Obiekt {
     int zycie;
+    int idCywilizacji;
 
     public Jednostka(int id, int pX, int pY) {
         super(id, pX, pY);
     }
 
+    public Jednostka(int id, Point pP , int pidCywilizacji) {
+        super(id, pP);
+        this.idCywilizacji = pidCywilizacji;
+    }
     public Jednostka(int id, Point pP) {
         super(id, pP);
     }

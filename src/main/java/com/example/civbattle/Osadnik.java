@@ -23,5 +23,6 @@ class Osadnik extends Jednostka {
 
     @Override
     void ruch() {
+
     }
 }

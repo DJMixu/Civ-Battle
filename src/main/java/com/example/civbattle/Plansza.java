@@ -52,6 +52,8 @@ public class Plansza {
                     System.out.print("S ");
                 } else if (obiekt instanceof Osada) {
                     System.out.print("M ");
+                } else if (obiekt instanceof Barbarzynca) {
+                    System.out.print("B ");
                 } else {
                     System.out.print("? "); // nieznany typ
                 }
