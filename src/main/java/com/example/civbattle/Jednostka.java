@@ -8,5 +8,6 @@ abstract class Jednostka extends Obiekt {
     }
 
 
+
     abstract void ruch();
 }
