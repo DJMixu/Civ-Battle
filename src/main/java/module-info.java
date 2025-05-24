@@ -11,6 +11,7 @@ module com.example.civbattle {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.compiler;
+    requires java.desktop;
 
     opens com.example.civbattle to javafx.fxml;
     exports com.example.civbattle;

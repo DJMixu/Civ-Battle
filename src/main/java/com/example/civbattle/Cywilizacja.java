@@ -1,5 +1,6 @@
 package com.example.civbattle;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,8 +10,8 @@ class Cywilizacja {
     };
     public int idCywilizacji;
     public String nameCywilizacji;
-    List<Jednostka> jednostki;
-    List<Osada> osady;
+    List<Jednostka> jednostki = new ArrayList<>();
+    List<Osada> osady = new ArrayList<>();
     int[] surowce;
 
     public Cywilizacja(int pID){
