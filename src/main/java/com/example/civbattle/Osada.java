@@ -1,9 +1,11 @@
 package com.example.civbattle;
 
 public class Osada extends Jednostka {
+    private final String imagePath;
 
     public Osada(int id, int pX, int pY) {
         super(id, pX, pY);
+        this.imagePath = "images/osada.png";
     }
 
     @Override
