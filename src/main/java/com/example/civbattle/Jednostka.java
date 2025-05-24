@@ -3,10 +3,10 @@ package com.example.civbattle;
 abstract class Jednostka extends Obiekt {
     int zycie;
 
-    public Jednostka(int id, int[] pozycja) {
-        super(id, pozycja);
-        this.zycie = 10;
+    public Jednostka(int id, int pX, int pY) {
+        super(id, pX, pY);
     }
+
 
     abstract void ruch();
 }

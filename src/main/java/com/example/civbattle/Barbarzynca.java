@@ -2,8 +2,9 @@ package com.example.civbattle;
 
 class Barbarzynca extends Jednostka {
 
-    public Barbarzynca(int id, int[] pozycja) {
-        super(id, pozycja);
+
+    public Barbarzynca(int id, int pX, int pY) {
+        super(id, pX, pY);
     }
 
     void atak() {

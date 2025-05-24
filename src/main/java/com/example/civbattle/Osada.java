@@ -1,8 +1,9 @@
 package com.example.civbattle;
 
-class Osada extends Jednostka {
-    public Osada(int id, int[] pozycja) {
-        super(id, pozycja);
+public class Osada extends Jednostka {
+
+    public Osada(int id, int pX, int pY) {
+        super(id, pX, pY);
     }
 
     @Override

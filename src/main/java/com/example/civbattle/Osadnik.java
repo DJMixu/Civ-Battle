@@ -2,8 +2,9 @@ package com.example.civbattle;
 
 class Osadnik extends Jednostka {
 
-    public Osadnik(int id, int[] pozycja) {
-        super(id, pozycja);
+
+    public Osadnik(int id, int pX, int pY) {
+        super(id, pX, pY);
     }
 
     void zbierajSurowce() {

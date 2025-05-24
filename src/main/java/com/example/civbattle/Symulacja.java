@@ -1,10 +1,16 @@
 package com.example.civbattle;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Symulacja {
+
+
+    public Cywilizacja[] listaCywilizacji;
     public int iSymulacjaX , iSymulacjaY , iLiczbaCywilizacji;
     public Random ziarno;
+    public Plansza plansza;
     //Domyślny start symulacji
     public Symulacja(int pX, int pY, int plCiv, String pSeed) {
         System.out.println(startSymulacji(pX, pY, plCiv, pSeed) == 0
@@ -32,7 +38,13 @@ public class Symulacja {
        iSymulacjaX = pX;
        iSymulacjaY = pY;
        iLiczbaCywilizacji = plCywilizacji;
-       Plansza plansza = new Plansza(iSymulacjaX,iSymulacjaY);
+       plansza = new Plansza(iSymulacjaX,iSymulacjaY);
+       listaCywilizacji = new Cywilizacja[plCywilizacji];
+       for(int i=0; i<plCywilizacji;i++){
+           listaCywilizacji[i] = new Cywilizacja(i);
+           listaCywilizacji[i].dodajJednostkę(new Osadnik(1,1 , 1));
+       }
+
        return 0;
     }
 

@@ -1,14 +1,18 @@
 package com.example.civbattle;
 
+import eu.hansolo.toolboxfx.geom.Point;
+
 import java.util.List;
 class Obiekt {
     int id;
-    int[] pozycja;
+    Point pozycja;
 
-    public Obiekt(int id, int[] pozycja) {
+    public Obiekt(int id, int pX , int pY) {
         this.id = id;
-        this.pozycja = pozycja;
+        pozycja = new Point(pX,pY);
     }
+
+
 }
 
 
