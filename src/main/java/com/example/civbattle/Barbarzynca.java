@@ -1,11 +1,11 @@
 package com.example.civbattle;
 
 class Barbarzynca extends Jednostka {
-    private final String imagePath;
+    private final String logoPath;
 
     public Barbarzynca(int id, int pX, int pY) {
         super(id, pX, pY);
-        this.imagePath = "images/barbarzynca.png";
+        this.logoPath = "images/barbarzynca.png";
     }
 
     void atak() {
