@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.List;
 class Obiekt {
     int id;
-    Point pozycja;
+    public Point pozycja;
 
     public Obiekt(int id, int pX , int pY) {
         this.id = id;

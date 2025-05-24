@@ -1,0 +1,21 @@
+package com.example.civbattle;
+
+import java.awt.*;
+
+public class Surowiec extends Obiekt{
+    int[] wartosciSurowca = {0,0,0};
+    public Surowiec(int id, int pX, int pY) {
+        super(id, pX, pY);
+    }
+
+    public Surowiec(int id, Point pP , int pJakosc , int pTyp) {
+        super(id, pP);
+        generujWartosci(pJakosc,pTyp);
+    }
+    public void generujWartosci(int pJakosc , int pTyp){
+        wartosciSurowca[0] = pJakosc*10;
+        wartosciSurowca[0] = pJakosc*10;
+        wartosciSurowca[0] = pJakosc*10;
+        wartosciSurowca[pTyp] = wartosciSurowca[pTyp]*3;
+    }
+}
