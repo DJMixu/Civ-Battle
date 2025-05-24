@@ -8,57 +8,78 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Line;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.Arrays;
 
 public class GridApplication extends Application {
 
     private GridPane gridPane;
+    private VBox statsPanel; // Panel statystyk cywilizacji
+    private Cywilizacja Egipt; // Cywilizacja Egipt
+    private Cywilizacja Rzym; // Cywilizacja Rzym
 
     @Override
     public void start(Stage stage) {
-        // Create the grid
+        // Inicjalizacja cywilizacji
+        Egipt = new Cywilizacja(0);
+        Egipt.surowce = new int[]{100, 200, 300};
+        Rzym = new Cywilizacja(1);
+        Rzym.surowce = new int[]{2, 3, 1};
+
+        // Tworzenie siatki
         gridPane = new GridPane();
-        gridPane.setAlignment(Pos.CENTER); // Ensure the grid is centered
+        gridPane.setAlignment(Pos.CENTER); // Wyśrodkowanie siatki
 
-        // dynamic spacer
+        // Dynamiczny odstęp po lewej stronie
         Region leftSpacer = new Region();
-        leftSpacer.prefWidthProperty().bind(stage.widthProperty().multiply(0.1)); // 10% of stage width
+        leftSpacer.prefWidthProperty().bind(stage.widthProperty().multiply(0.1)); // 10% szerokości okna
 
-        // container for the spacer and grid
+        // Kontener dla odstępu i siatki
         HBox gridContainer = new HBox(leftSpacer, gridPane);
-        gridContainer.setAlignment(Pos.CENTER); // Center the grid horizontally
+        gridContainer.setAlignment(Pos.CENTER); // Wyśrodkowanie poziome siatki
 
-        // Bind the gridPane size to the remaining space in the container
+        // Powiązanie rozmiaru siatki z pozostałą przestrzenią
         gridPane.prefWidthProperty().bind(stage.widthProperty().multiply(0.8));
         gridPane.prefHeightProperty().bind(stage.heightProperty().multiply(0.8));
 
-        // Divide the space
+        // Pionowa linia podziału
         Line vdiv = new Line();
         vdiv.setStyle("-fx-stroke: black;");
         vdiv.endYProperty().bind(stage.heightProperty());
 
-        // Position elements
+        // Pozycjonowanie elementów
         BorderPane root = new BorderPane();
         root.setLeft(gridContainer);
         root.setCenter(vdiv);
 
-        // Button grid size
+        // Przycisk zmiany rozmiaru siatki
         Button resizeButton = new Button("Resize Grid");
         resizeButton.setOnAction(e -> showResizeDialog());
         root.setTop(resizeButton);
 
-        // Scene setup
+        // Panel statystyk
+        statsPanel = new VBox(10);
+        statsPanel.setStyle("-fx-padding: 10; -fx-border-color: black; -fx-border-width: 1;");
+        statsPanel.setPrefWidth(200); // Stała szerokość panelu
+        updateStatsPanel(); // Wypełnienie panelu danymi
+
+        // Dodanie panelu statystyk po prawej stronie
+        root.setRight(statsPanel);
+
+        // Ustawienia sceny
         Scene scene = new Scene(root, 1280, 720);
         stage.setTitle("Civilization Battle Simulator");
         stage.setScene(scene);
         stage.show();
 
-        // Grid default size
+        // Domyślny rozmiar siatki
         createGrid(10, 10);
     }
 
     private void showResizeDialog() {
-        // Resize dialog
+        // Okno dialogowe zmiany rozmiaru siatki
         Dialog<int[]> dialog = new Dialog<>();
         dialog.setTitle("Resize Grid");
         dialog.setHeaderText("Enter the new number of rows (N) and columns (M):\n Leave empty for a 5x5 grid.");
@@ -81,7 +102,7 @@ public class GridApplication extends Application {
                 String colsInput = colsField.getText().trim();
 
                 if ("".equalsIgnoreCase(rowsInput) || "".equalsIgnoreCase(colsInput)) {
-                    // Default square grid
+                    // Domyślna siatka 5x5
                     return new int[]{5, 5};
                 }
 
@@ -103,35 +124,36 @@ public class GridApplication extends Application {
     }
 
     private void createGrid(int rows, int cols) {
-        // Clear previous grid
+        // Czyszczenie poprzedniej siatki
         gridPane.getChildren().clear();
         gridPane.getRowConstraints().clear();
         gridPane.getColumnConstraints().clear();
 
-        // Make square
+        // Ustawienie proporcji siatki
         gridPane.maxWidthProperty().bind(Bindings.min(gridPane.prefWidthProperty(), gridPane.prefHeightProperty()));
         gridPane.maxHeightProperty().bind(gridPane.maxWidthProperty());
 
-        // Row column constraints
+        // Dodanie wierszy
         for (int i = 0; i < rows; i++) {
             RowConstraints rowConstraints = new RowConstraints();
             rowConstraints.setPercentHeight(100.0 / rows);
             gridPane.getRowConstraints().add(rowConstraints);
         }
 
+        // Dodanie kolumn
         for (int j = 0; j < cols; j++) {
             ColumnConstraints colConstraints = new ColumnConstraints();
             colConstraints.setPercentWidth(100.0 / cols);
             gridPane.getColumnConstraints().add(colConstraints);
         }
 
-        // Make the grid
+        // Tworzenie komórek siatki
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 Region cell = new Region();
                 cell.setStyle("-fx-border-color: black; -fx-background-color: white;");
 
-                // Square
+                // Kwadratowe komórki
                 cell.prefWidthProperty().bind(Bindings.min(
                         gridPane.widthProperty().divide(cols),
                         gridPane.heightProperty().divide(rows)
@@ -141,6 +163,24 @@ public class GridApplication extends Application {
                 gridPane.add(cell, j, i);
             }
         }
+    }
+
+    private void updateStatsPanel() {
+        statsPanel.getChildren().clear(); // Czyszczenie poprzednich statystyk
+
+        // Statystyki Egiptu
+        statsPanel.getChildren().add(new Text("Cywilizacja: " + Egipt.nameCywilizacji));
+        statsPanel.getChildren().add(new Text("Surowce: " + Arrays.toString(Egipt.surowce)));
+        statsPanel.getChildren().add(new Text("Jednostki: " + (Egipt.jednostki != null ? Egipt.jednostki.size() : 0)));
+        statsPanel.getChildren().add(new Text("Osady: " + (Egipt.osady != null ? Egipt.osady.size() : 0)));
+        statsPanel.getChildren().add(new Separator());
+
+        // Statystyki Rzymu
+        statsPanel.getChildren().add(new Text("Cywilizacja: " + Rzym.nameCywilizacji));
+        statsPanel.getChildren().add(new Text("Surowce: " + Arrays.toString(Rzym.surowce)));
+        statsPanel.getChildren().add(new Text("Jednostki: " + (Rzym.jednostki != null ? Rzym.jednostki.size() : 0)));
+        statsPanel.getChildren().add(new Text("Osady: " + (Rzym.osady != null ? Rzym.osady.size() : 0)));
+        statsPanel.getChildren().add(new Separator());
     }
 
     public static void main(String[] args) {
