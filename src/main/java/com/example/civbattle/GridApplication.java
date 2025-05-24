@@ -186,6 +186,8 @@ public class GridApplication extends Application {
     public static void main(String[] args) {
         System.out.println("start");
         Symulacja symulacja = new Symulacja(90, 20, 5, "Ala ma kota");
+        symulacja.krokSymulacji();
+        symulacja.plansza.wypisz();
         launch();
 
     }

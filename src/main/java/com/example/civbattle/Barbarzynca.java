@@ -18,6 +18,6 @@ class Barbarzynca extends Jednostka {
     }
 
     @Override
-    void ruch() {
+    public void ruch(Plansza plansza, Cywilizacja cywilizacja) {
     }
 }

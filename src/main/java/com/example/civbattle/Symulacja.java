@@ -10,8 +10,9 @@ public class Symulacja {
 
     public Cywilizacja[] listaCywilizacji;
     public int iSymulacjaX, iSymulacjaY, iLiczbaCywilizacji;
-    public Random ziarno;
+    public static Random ziarno;
     public Plansza plansza;
+    public static int iSymlacjaLicznikID;
 
     //Domyślny start symulacji
     public Symulacja(int pX, int pY, int plCiv, String pSeed) {
@@ -36,14 +37,19 @@ public class Symulacja {
     }
 
     public int krokSymulacji(){
-        for (Cywilizacja cywilizacja : listaCywilizacji) {
+        //Krok symulacji do paprawy blad ze zmiana listy podczas jej iterowania
+      /*  for (Cywilizacja civ : listaCywilizacji) {
+            for (Jednostka jednostka : civ.jednostki) {
+                jednostka.ruch(plansza , civ);
+            }
 
         }
-
+*/
         return 1;
     }
 
     public int startSymulacji(int pX, int pY, int plCywilizacji, String pSeed) {
+        iSymlacjaLicznikID = 0;
         if (plCywilizacji > 9) {
             System.out.println("Maksymlanie 9 cywilizacji");
             plCywilizacji = 9;
@@ -66,7 +72,7 @@ public class Symulacja {
         //System.out.println(plansza.zwrocPole(pozycja1));
         //System.out.println(obiektyWZasiegu(pozycja1,3));
         if (plansza.zwrocPole(pozycja1) == null) {
-            if (obiektyWZasiegu(pozycja1, 3).isEmpty())
+            if (obiektyWZasiegu(pozycja1, 3 , plansza).isEmpty())
                 return pozycja1;
         }
         System.out.println("Pozycja zajeta dla jednostki");
@@ -87,9 +93,12 @@ public class Symulacja {
             listaCywilizacji[i] = new Cywilizacja(i);
             Point pozycja = generujPozycje();
             System.out.println("Wygenerowane pozycje osadnik " + i);
-            listaCywilizacji[i].dodajJednostkę(new Osadnik(1, pozycja));
-            listaCywilizacji[i].dodajJednostkę(new Wojownik(2, (pozycja.x < iSymulacjaX / 2 ? pozycja.x + 1 : pozycja.x - 1), pozycja.y));
-            listaCywilizacji[i].dodajJednostkę(new Wojownik(2, (pozycja.x), pozycja.y < iSymulacjaY / 2 ? pozycja.y + 1 : pozycja.y - 1));
+            listaCywilizacji[i].dodajJednostkę(new Osadnik(iSymlacjaLicznikID++, pozycja));
+            listaCywilizacji[i].licznikOsadnikow++;
+            listaCywilizacji[i].dodajJednostkę(new Wojownik(iSymlacjaLicznikID++, (pozycja.x < iSymulacjaX / 2 ? pozycja.x + 1 : pozycja.x - 1), pozycja.y));
+            listaCywilizacji[i].licznikWojownikow++;
+            listaCywilizacji[i].dodajJednostkę(new Wojownik(iSymlacjaLicznikID++, (pozycja.x), pozycja.y < iSymulacjaY / 2 ? pozycja.y + 1 : pozycja.y - 1));
+            listaCywilizacji[i].licznikWojownikow++;
             plansza.dodajJednostki(listaCywilizacji[i].jednostki);
         }
         listaCywilizacji[iLiczbaCywilizacji] = new Cywilizacja(9);
@@ -103,7 +112,7 @@ public class Symulacja {
         int liczbaSurowcow = iSymulacjaX * iSymulacjaY / 5;
         for (int i = 0; i < liczbaSurowcow; i++) {
             Point pozycja = generujPozycjeSurowca();
-            Surowiec sur = new Surowiec(i, pozycja, (ziarno.nextInt(15) + 5), ziarno.nextInt(3));
+            Surowiec sur = new Surowiec(iSymlacjaLicznikID++, pozycja, (ziarno.nextInt(15) + 5), ziarno.nextInt(3));
             plansza.dodajObiekt(pozycja, sur);
             System.out.print(i + ";");
         }
@@ -111,14 +120,13 @@ public class Symulacja {
 
     }
 
-    public List<Obiekt> obiektyWZasiegu(Point punkt, int zasieg) {
+    public static List<Obiekt> obiektyWZasiegu(Point punkt, int zasieg , Plansza plansza) {
         List<Obiekt> znalezione = new ArrayList<>();
-
         for (int dx = -zasieg; dx <= zasieg; dx++) {
             for (int dy = -zasieg; dy <= zasieg; dy++) {
                 int nx = punkt.x + dx;
                 int ny = punkt.y + dy;
-                if (nx >= 0 && nx < iSymulacjaX && ny >= 0 && ny < iSymulacjaY) {
+                if (nx >= 0 && nx < plansza.x && ny >= 0 && ny < plansza.y) {
                     Obiekt o = plansza.zwrocPole(nx, ny);
                     if (o != null) {
                         znalezione.add(o);

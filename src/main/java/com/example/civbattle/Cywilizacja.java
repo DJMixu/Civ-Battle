@@ -11,6 +11,7 @@ class Cywilizacja {
     public int idCywilizacji;
     public String nameCywilizacji;
     public int[] surowce = new int[]{50, 50, 50};
+    int licznikWojownikow , licznikOsadnikow , licznikOsad;
     List<Jednostka> jednostki = new ArrayList<>();
     List<Osada> osady = new ArrayList<>();
 
@@ -18,6 +19,9 @@ class Cywilizacja {
     public Cywilizacja(int pID) {
         idCywilizacji = pID;
         nameCywilizacji = nazwyCywilizacji[pID];
+        licznikOsadnikow = 0;
+        licznikWojownikow = 0;
+        licznikOsad = 0;
 
     }
 

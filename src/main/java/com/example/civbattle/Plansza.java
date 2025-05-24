@@ -5,9 +5,12 @@ import java.util.List;
 
 public class Plansza {
     private Obiekt[][] plansza;
+    int x , y;
 
     public Plansza(int px, int py) {
         plansza = new Obiekt[px][py];
+        x = px;
+        y = py;
     }
 
     public Obiekt zwrocPole(int x, int y) {
@@ -34,6 +37,11 @@ public class Plansza {
         for (Jednostka obiekt : jednostki) {
             plansza[obiekt.pozycja.x][obiekt.pozycja.y] = obiekt;
         }
+    }
+    public void usunObiekt (Point punkt){
+        System.out.println("USUWANIE");
+        plansza[punkt.x][punkt.y] = null;
+        System.out.println("USUWANIE");
     }
 
     public void wypisz() {

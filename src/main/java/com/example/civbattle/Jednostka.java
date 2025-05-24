@@ -19,5 +19,5 @@ abstract class Jednostka extends Obiekt {
     }
 
 
-    abstract void ruch();
+    public abstract void ruch(Plansza plansza, Cywilizacja cywilizacja);
 }
