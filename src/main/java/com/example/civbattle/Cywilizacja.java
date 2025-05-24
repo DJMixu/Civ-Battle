@@ -15,7 +15,7 @@ class Cywilizacja {
     List<Osada> osady = new ArrayList<>();
 
 
-    public Cywilizacja(int pID){
+    public Cywilizacja(int pID) {
         idCywilizacji = pID;
         nameCywilizacji = nazwyCywilizacji[pID];
 
