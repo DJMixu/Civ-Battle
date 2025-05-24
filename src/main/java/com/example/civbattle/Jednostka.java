@@ -1,5 +1,7 @@
 package com.example.civbattle;
 
+import java.awt.*;
+
 abstract class Jednostka extends Obiekt {
     int zycie;
 
@@ -7,6 +9,9 @@ abstract class Jednostka extends Obiekt {
         super(id, pX, pY);
     }
 
+    public Jednostka(int id, Point pP) {
+        super(id, pP);
+    }
 
 
     abstract void ruch();

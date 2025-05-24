@@ -1,5 +1,7 @@
 package com.example.civbattle;
 
+import java.awt.*;
+
 public class Plansza {
     private Obiekt[][] plansza;
     public Plansza(int px , int py){
@@ -8,6 +10,9 @@ public class Plansza {
 
     public Obiekt zwrocPole(int x , int y){
         return plansza[x][y];
+    }
+    public Obiekt zwrocPole(Point pPozycja){
+        return plansza[pPozycja.x][pPozycja.y];
     }
     public String dodajObiekt(int x , int y , Obiekt obiekt){
         plansza[x][y] = obiekt;

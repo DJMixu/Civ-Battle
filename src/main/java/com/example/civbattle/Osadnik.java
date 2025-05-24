@@ -1,5 +1,7 @@
 package com.example.civbattle;
 
+import java.awt.*;
+
 class Osadnik extends Jednostka {
     private final String imagePath;
 
@@ -7,6 +9,11 @@ class Osadnik extends Jednostka {
         super(id, pX, pY);
         this.imagePath = "images/osadnik.png";
     }
+
+    public Osadnik(int id, Point pozycja) {
+        super(id , pozycja);
+    }
+
 
     void zbierajSurowce() {
     }
