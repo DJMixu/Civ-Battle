@@ -10,9 +10,10 @@ import java.util.stream.Collectors;
 class Osadnik extends Jednostka {
     private final String logoPath = "images/osadnik.png";
 
-    public Osadnik(int id, Point pozycja) {
+    public Osadnik(int id, Point pozycja , int civ) {
         super(id, pozycja);
         this.zycie = 20;
+        this.idCywilizacji = civ;
     }
 
     @Override
@@ -58,26 +59,7 @@ class Osadnik extends Jednostka {
     }
 
 
-   public List<Point> getSasiedzi(Point p, int szerokosc, int wysokosc) {
-       List<Point> wynik = new ArrayList<>();
-       int[] dx = {-1, 0, 1};
-       int[] dy = {-1, 0, 1};
 
-       for (int x : dx) {
-           for (int y : dy) {
-               if (x == 0 && y == 0) continue;
-
-               int nx = p.x + x;
-               int ny = p.y + y;
-
-               if (nx >= 0 && nx < szerokosc && ny >= 0 && ny < wysokosc) {
-                   wynik.add(new Point(nx, ny));
-               }
-           }
-       }
-
-       return wynik;
-   }
     public boolean uciekaj(Plansza plansza, Symulacja sim, List<Jednostka> zagrozenie) {
        double srodekX = 0, srodekY = 0;
        for (Jednostka j : zagrozenie) {

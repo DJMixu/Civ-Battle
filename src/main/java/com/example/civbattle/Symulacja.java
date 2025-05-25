@@ -98,11 +98,11 @@ public class Symulacja {
             listaCywilizacji[i] = new Cywilizacja(i);
             Point pozycja = generujPozycje();
             //System.out.println("Wygenerowane pozycje osadnik " + i);
-            listaCywilizacji[i].dodajJednostkę(new Osadnik(iSymlacjaLicznikID++, pozycja));
+            listaCywilizacji[i].dodajJednostkę(new Osadnik(iSymlacjaLicznikID++, pozycja , i));
             listaCywilizacji[i].licznikOsadnikow++;
-            listaCywilizacji[i].dodajJednostkę(new Wojownik(iSymlacjaLicznikID++, (pozycja.x < iSymulacjaX / 2 ? pozycja.x + 1 : pozycja.x - 1), pozycja.y));
+            listaCywilizacji[i].dodajJednostkę(new Wojownik(iSymlacjaLicznikID++, (pozycja.x < iSymulacjaX / 2 ? pozycja.x + 1 : pozycja.x - 1), pozycja.y , i ));
             listaCywilizacji[i].licznikWojownikow++;
-            listaCywilizacji[i].dodajJednostkę(new Wojownik(iSymlacjaLicznikID++, (pozycja.x), pozycja.y < iSymulacjaY / 2 ? pozycja.y + 1 : pozycja.y - 1));
+            listaCywilizacji[i].dodajJednostkę(new Wojownik(iSymlacjaLicznikID++, (pozycja.x), pozycja.y < iSymulacjaY / 2 ? pozycja.y + 1 : pozycja.y - 1 , i));
             listaCywilizacji[i].licznikWojownikow++;
             plansza.dodajJednostki(listaCywilizacji[i].jednostki);
         }
