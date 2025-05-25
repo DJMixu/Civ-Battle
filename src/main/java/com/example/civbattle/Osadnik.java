@@ -4,16 +4,14 @@ import java.awt.*;
 import java.util.List;
 
 class Osadnik extends Jednostka {
-    private final String logoPath;
+    private final String logoPath = "images/osadnik.png";
 
     public Osadnik(int id, int pX, int pY) {
         super(id, pX, pY);
-        this.logoPath = "images/osadnik.png";
     }
 
     public Osadnik(int id, Point pozycja) {
         super(id, pozycja);
-        this.logoPath = "images/osadnik.png";
     }
 
     void zbierajSurowce(Plansza plansza) {

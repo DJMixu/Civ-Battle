@@ -3,11 +3,10 @@ package com.example.civbattle;
 import java.awt.*;
 
 public class Osada extends Jednostka {
-    private final String logoPath;
+    private final String logoPath= "images/osada.png";
 
     public Osada(int id ,Point pozycja , int civ) {
         super(id , pozycja, civ);
-        this.logoPath = "images/osada.png";
     }
 
     @Override
