@@ -4,6 +4,7 @@ import java.awt.*;
 
 public class Surowiec extends Obiekt {
     int[] wartosciSurowca = {0, 0, 0};
+    public int pTyp; // typ surowca: 0=stone, 1=wood, 2=gold
 
     public Surowiec(int id, int pX, int pY) {
         super(id, pX, pY);
@@ -11,6 +12,7 @@ public class Surowiec extends Obiekt {
 
     public Surowiec(int id, Point pP, int pJakosc, int pTyp) {
         super(id, pP);
+        this.pTyp = pTyp;
         generujWartosci(pJakosc, pTyp);
     }
 
