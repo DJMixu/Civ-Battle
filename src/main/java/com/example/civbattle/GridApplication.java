@@ -197,7 +197,21 @@ public class GridApplication extends Application {
                     } else if (obiekt instanceof Osadnik) {
                         imagePath = "/images/osadnik.png";
                     } else if (obiekt instanceof Surowiec) {
-                        imagePath = "/images/surowiec.png";
+                        // Użyj pTyp do wyboru obrazka
+                        int typ = ((Surowiec) obiekt).pTyp;
+                        switch (typ) {
+                            case 0:
+                                imagePath = "/images/stone.png";
+                                break;
+                            case 1:
+                                imagePath = "/images/drzewo.png";
+                                break;
+                            case 2:
+                                imagePath = "/images/ETCS.png";
+                                break;
+                            default:
+                                imagePath = "/images/stone.png"; //
+                        }
                     } else if (obiekt instanceof Osada) {
                         imagePath = "/images/osada.png";
                     } else if (obiekt instanceof Barbarzynca) {
