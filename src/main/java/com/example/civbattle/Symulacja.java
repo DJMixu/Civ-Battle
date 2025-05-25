@@ -42,7 +42,6 @@ public class Symulacja {
        for (Cywilizacja civ : listaCywilizacji) {
            List<Jednostka> usun = new ArrayList<Jednostka>();
             for (Jednostka jednostka : civ.jednostki) {
-                jednostka.ruch( this);
                 if(jednostka.ruch(  this)==2){
                    usun.add(jednostka);
                 }

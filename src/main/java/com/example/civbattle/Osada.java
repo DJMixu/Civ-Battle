@@ -20,6 +20,8 @@ public class Osada extends Jednostka {
             this.zycie = 50;
         else if (this.zycie < 45)
             this.zycie += 5;
+        if(!(zycie >0))
+            smierc(sim.plansza , sim.listaCywilizacji[this.idCywilizacji]);
 
         return 0;
     }

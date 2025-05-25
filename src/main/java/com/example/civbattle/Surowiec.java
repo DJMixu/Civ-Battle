@@ -16,8 +16,8 @@ public class Surowiec extends Obiekt {
 
     public void generujWartosci(int pJakosc, int pTyp) {
         wartosciSurowca[0] = pJakosc * 10;
-        wartosciSurowca[0] = pJakosc * 10;
-        wartosciSurowca[0] = pJakosc * 10;
+        wartosciSurowca[1] = pJakosc * 10;
+        wartosciSurowca[2] = pJakosc * 10;
         wartosciSurowca[pTyp] = wartosciSurowca[pTyp] * 3;
     }
 }
