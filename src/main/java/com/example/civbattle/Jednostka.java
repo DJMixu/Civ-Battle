@@ -5,6 +5,7 @@ import java.awt.*;
 abstract class Jednostka extends Obiekt {
     int zycie;
     int idCywilizacji;
+    public Point poprzedniaPozycja;
 
     public Jednostka(int id, int pX, int pY) {
         super(id, pX, pY);
