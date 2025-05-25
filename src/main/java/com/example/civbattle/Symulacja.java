@@ -37,14 +37,20 @@ public class Symulacja {
     }
 
     public int krokSymulacji(){
-        //Krok symulacji do paprawy blad ze zmiana listy podczas jej iterowania
-      /*  for (Cywilizacja civ : listaCywilizacji) {
-            for (Jednostka jednostka : civ.jednostki) {
-                jednostka.ruch(plansza , civ);
-            }
 
-        }
-*/
+        //Krok symulacji do paprawy blad ze zmiana listy podczas jej iterowania
+       for (Cywilizacja civ : listaCywilizacji) {
+           List<Jednostka> usun = new ArrayList<Jednostka>();
+            for (Jednostka jednostka : civ.jednostki) {
+                jednostka.ruch( this);
+                if(jednostka.ruch(  this)==2){
+                   usun.add(jednostka);
+                }
+            }
+           for (Jednostka jednostka : usun) {
+               civ.jednostki.remove(jednostka);
+           }
+       }
         return 1;
     }
 

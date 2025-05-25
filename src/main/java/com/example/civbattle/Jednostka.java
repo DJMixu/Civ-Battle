@@ -16,8 +16,9 @@ abstract class Jednostka extends Obiekt {
     }
     public Jednostka(int id, Point pP) {
         super(id, pP);
+
     }
 
 
-    public abstract void ruch(Plansza plansza, Cywilizacja cywilizacja);
+    public abstract int ruch(Symulacja sim);
 }

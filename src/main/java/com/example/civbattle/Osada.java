@@ -8,12 +8,19 @@ public class Osada extends Jednostka {
     public Osada(int id ,Point pozycja , int civ) {
         super(id , pozycja, civ);
     }
+    void smierc(Plansza plansza, Cywilizacja civ) {
+        civ.licznikOsad--;
+        System.out.println(this.id + "osadnik usuniety");
+        plansza.usunObiekt(pozycja);
+    }
 
     @Override
-    public void ruch(Plansza plansza, Cywilizacja cywilizacja) {
+    public int ruch(Symulacja sim) {
         if (this.zycie < 50 && this.zycie >= 45)
             this.zycie = 50;
         else if (this.zycie < 45)
             this.zycie += 5;
+
+        return 0;
     }
 }

@@ -6,14 +6,25 @@ class Wojownik extends Jednostka {
 
     public Wojownik(int id, int pX, int pY) {
         super(id, pX, pY);
-        this.zycie = 20;
+        this.zycie = 30;
         this.atak = 10;
     }
 
     void atak() {
     }
 
+    int smierc(Plansza plansza, Cywilizacja civ) {
+        civ.licznikWojownikow--;
+        System.out.println(this.id + "wojownik usuniety");
+        plansza.usunObiekt(pozycja);
+        return 2;
+    }
+
     @Override
-    public void ruch(Plansza plansza, Cywilizacja cywilizacja) {
+    public int ruch(Symulacja sim) {
+        Cywilizacja civ = sim.listaCywilizacji[this.idCywilizacji];
+        if(!(this.zycie > 0))
+            return smierc(sim.plansza,civ);
+        return 0;
     }
 }

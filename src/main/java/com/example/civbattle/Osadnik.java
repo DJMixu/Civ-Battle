@@ -6,34 +6,36 @@ import java.util.List;
 class Osadnik extends Jednostka {
     private final String logoPath = "images/osadnik.png";
 
-    public Osadnik(int id, int pX, int pY) {
-        super(id, pX, pY);
-    }
-
     public Osadnik(int id, Point pozycja) {
         super(id, pozycja);
+        this.zycie = 20;
     }
 
     void zbierajSurowce(Plansza plansza) {
     }
 
-    void zakładajOsadę(Plansza plansza , Cywilizacja civ) {
+    int zakładajOsadę(Plansza plansza, Cywilizacja civ) {
+        smierc(plansza, civ);
+        plansza.dodajObiekt(pozycja, new Osada(Symulacja.iSymlacjaLicznikID++, pozycja, civ.idCywilizacji));
+        return 2;
+    }
+
+    int smierc(Plansza plansza, Cywilizacja civ) {
         civ.licznikOsadnikow--;
         System.out.println(this.id + "osadnik usuniety");
-        civ.jednostki.remove(this);
-        System.out.println(this.id + "osadnik usuniety");
         plansza.usunObiekt(pozycja);
-        plansza.dodajObiekt(pozycja , new Osada(Symulacja.iSymlacjaLicznikID++, pozycja , civ.idCywilizacji));
-
-
+        return 2;
     }
 
     @Override
-    public void ruch(Plansza plansza, Cywilizacja civ) {
-        if(civ.surowce[0] >= 2 && civ.surowce[1] >= 2 && civ.surowce[2] >= 2 && civ.licznikOsad<civ.licznikWojownikow) {
-            zakładajOsadę(plansza, civ);
+    public int ruch(Symulacja sim) {
+        Cywilizacja civ = sim.listaCywilizacji[this.idCywilizacji];
+        if(!(this.zycie > 0))
+            return smierc(sim.plansza,civ);
+        if (civ.surowce[0] >= 200 && civ.surowce[1] >= 200 && civ.surowce[2] >= 200 && civ.licznikOsad < civ.licznikWojownikow) {
+            return zakładajOsadę(sim.plansza, civ);
         }
-        List<Obiekt> znalezione = Symulacja.obiektyWZasiegu(pozycja,3,plansza);
-
+        List<Obiekt> znalezione = Symulacja.obiektyWZasiegu(pozycja, 3, sim.plansza);
+        return 0;
     }
 }
