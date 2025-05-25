@@ -23,11 +23,14 @@ public class GridApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-        // Inicjalizacja cywilizacji
-        Egipt = new Cywilizacja(0);
-        Egipt.surowce = new int[]{100, 200, 300};
-        Rzym = new Cywilizacja(1);
-        Rzym.surowce = new int[]{2, 3, 1};
+//        // Inicjalizacja cywilizacji
+//        Egipt = new Cywilizacja(0);
+//        Egipt.surowce = new int[]{100, 200, 300};
+//        Rzym = new Cywilizacja(1);
+//        Rzym.surowce = new int[]{2, 3, 1};
+//        Grecja = new Cywilizacja(2);
+//        Grecja.surowce = new int[]{5, 5, 5};
+
 
         // Tworzenie siatki
         gridPane = new GridPane();
