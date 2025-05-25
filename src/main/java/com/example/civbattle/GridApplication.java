@@ -66,9 +66,9 @@ public class GridApplication extends Application {
         }
 
         // Pobranie parametrów od użytkownika
-        int rows =  parameters[0];
-        int cols =  parameters[1];
-        int civs =  parameters[2];
+        int rows = parameters[0];
+        int cols = parameters[1];
+        int civs = parameters[2];
 
         // Inicjalizacja siatki i interfejsu użytkownika
         gridPane = new GridPane();
