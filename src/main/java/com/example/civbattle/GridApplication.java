@@ -247,17 +247,43 @@ public class GridApplication extends Application {
 
 
     private void updateStatsPanel(Symulacja symulacja) {
-        // Czyszczenie starego panelu statystyk
         statsPanel.getChildren().clear();
 
-        // Wyświetlanie statystyk dla każdej cywilizacji
         for (Cywilizacja civ : symulacja.listaCywilizacji) {
             if (civ != null) {
-                statsPanel.getChildren().add(new Text("Cywilizacja: " + civ.nameCywilizacji));
-                statsPanel.getChildren().add(new Text("Surowce: " + Arrays.toString(civ.surowce)));
-                statsPanel.getChildren().add(new Text("Jednostki: " + (civ.jednostki != null ? civ.jednostki.size() : 0)));
-                statsPanel.getChildren().add(new Text("Osady: " + (civ.osady != null ? civ.osady.size() : 0)));
-                statsPanel.getChildren().add(new Separator());
+                String color = getCivilizationColor(civ.idCywilizacji);
+                Text civName = new Text("Cywilizacja: " + civ.nameCywilizacji);
+                civName.setStyle("-fx-fill: " + color + "; -fx-font-weight: bold;");
+
+                // Surowce z obrazkami
+                HBox surowceBox = new HBox(10);
+                surowceBox.setAlignment(Pos.CENTER_LEFT);
+
+
+                String[] imgPaths = {"/images/stone.png", "/images/drzewo.png", "/images/ETCS.png"};
+                String[] tooltips = {"Kamień", "Drewno", "Złoto"};
+
+                for (int i = 0; i < civ.surowce.length && i < imgPaths.length; i++) {
+                    ImageView icon = new ImageView();
+                    try {
+                        icon.setImage(new Image(getClass().getResource(imgPaths[i]).toExternalForm()));
+                    } catch (Exception e) {
+                    }
+                    icon.setFitWidth(24);
+                    icon.setFitHeight(24);
+                    Label label = new Label(String.valueOf(civ.surowce[i]), icon);
+                    label.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
+                    label.setContentDisplay(ContentDisplay.LEFT);
+                    label.setTooltip(new Tooltip(tooltips[i]));
+                    surowceBox.getChildren().add(label);
+                }
+
+                Text jednostki = new Text("Jednostki: " + (civ.jednostki != null ? civ.jednostki.size() : 0));
+                jednostki.setStyle("-fx-fill: " + color + ";");
+                Text osady = new Text("Osady: " + (civ.osady != null ? civ.osady.size() : 0));
+                osady.setStyle("-fx-fill: " + color + ";");
+
+                statsPanel.getChildren().addAll(civName, surowceBox, jednostki, osady, new Separator());
             }
         }
     }
