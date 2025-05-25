@@ -29,7 +29,7 @@ public class Osada extends Jednostka {
             if(typ==1){
                 sim.plansza.dodajObiekt(pustePole , new Osadnik(Symulacja.iSymlacjaLicznikID , pustePole ,  this.idCywilizacji));
             }else{
-
+                sim.plansza.dodajObiekt(pustePole , new Wojownik(Symulacja.iSymlacjaLicznikID , pustePole ,  this.idCywilizacji));
             }
         }
 
