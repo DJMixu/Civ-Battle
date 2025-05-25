@@ -27,9 +27,13 @@ public class Osada extends Jednostka {
         }
         if(pustePole.x != -1){
             if(typ==1){
-                sim.plansza.dodajObiekt(pustePole , new Osadnik(Symulacja.iSymlacjaLicznikID , pustePole ,  this.idCywilizacji));
+                Jednostka os = new Osadnik(Symulacja.iSymlacjaLicznikID , pustePole ,  this.idCywilizacji);
+                sim.plansza.dodajObiekt(pustePole , os);
+                sim.listaCywilizacji[this.idCywilizacji].jednostki.add(os);
             }else{
-                sim.plansza.dodajObiekt(pustePole , new Wojownik(Symulacja.iSymlacjaLicznikID , pustePole ,  this.idCywilizacji));
+                Jednostka os = new Wojownik(Symulacja.iSymlacjaLicznikID , pustePole ,  this.idCywilizacji);
+                sim.plansza.dodajObiekt(pustePole , os);
+                sim.listaCywilizacji[this.idCywilizacji].jednostki.add(os);
             }
         }
 
