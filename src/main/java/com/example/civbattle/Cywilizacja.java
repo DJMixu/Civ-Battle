@@ -5,24 +5,27 @@ import java.util.Arrays;
 import java.util.List;
 
 class Cywilizacja {
-    private String[] nazwyCywilizacji = {
-            "Egipt", "Rzym", "Grecja", "Chiny", "Persja", "Majowie", "Wikingowie", "Japonia" , "Polska" , "Barbażyńcy"
-    };
     public int idCywilizacji;
     public String nameCywilizacji;
-    public int[] surowce = new int[]{50, 50, 50};
+    public int[] surowce;
     int licznikWojownikow , licznikOsadnikow , licznikOsad;
-    List<Jednostka> jednostki = new ArrayList<>();
-    List<Osada> osady = new ArrayList<>();
+    List<Jednostka> jednostki;
+    List<Osada> osady;
 
 
     public Cywilizacja(int pID) {
         idCywilizacji = pID;
+        String[] nazwyCywilizacji = {
+                "Egipt", "Rzym", "Grecja", "Chiny", "Persja", "Majowie", "Wikingowie", "Japonia", "Polska", "Barbażyńcy"
+        };
         nameCywilizacji = nazwyCywilizacji[pID];
         licznikOsadnikow = 0;
         licznikWojownikow = 0;
         licznikOsad = 0;
 
+        surowce = new int[]{50, 50, 50};
+        jednostki = new ArrayList<>();
+        osady = new ArrayList<>();
     }
 
     void dodajJednostkę(Jednostka j) {
