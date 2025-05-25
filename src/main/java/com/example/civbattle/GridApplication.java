@@ -197,7 +197,6 @@ public class GridApplication extends Application {
                     } else if (obiekt instanceof Osadnik) {
                         imagePath = "/images/osadnik.png";
                     } else if (obiekt instanceof Surowiec) {
-                        // Użyj pTyp do wyboru obrazka
                         int typ = ((Surowiec) obiekt).pTyp;
                         switch (typ) {
                             case 0:
