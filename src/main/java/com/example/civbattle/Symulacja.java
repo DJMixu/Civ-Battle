@@ -38,16 +38,16 @@ public class Symulacja {
 
     public int krokSymulacji(){
 
-        //Krok symulacji do paprawy blad ze zmiana listy podczas jej iterowania
        for (Cywilizacja civ : listaCywilizacji) {
            List<Jednostka> usun = new ArrayList<Jednostka>();
             for (Jednostka jednostka : civ.jednostki) {
+                System.out.println("RUCH");
                 if(jednostka.ruch(  this)==2){
                    usun.add(jednostka);
                 }
             }
-           for (Jednostka jednostka : usun) {
-               civ.jednostki.remove(jednostka);
+           for (Jednostka jednostka1 : usun) {
+               civ.jednostki.remove(jednostka1);
            }
        }
         return 1;
@@ -55,9 +55,9 @@ public class Symulacja {
 
     public int startSymulacji(int pX, int pY, int plCywilizacji, String pSeed) {
         iSymlacjaLicznikID = 0;
-        if (plCywilizacji > 9) {
+        if (plCywilizacji > 8) {
             System.out.println("Maksymlanie 9 cywilizacji");
-            plCywilizacji = 9;
+            plCywilizacji = 8;
         }
 
         ziarno = new Random(pSeed.hashCode());

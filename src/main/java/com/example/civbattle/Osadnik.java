@@ -47,7 +47,10 @@ class Osadnik extends Jednostka {
         civ.surowce[0] -=1000;
         civ.surowce[1] -=1000;
         civ.surowce[2] -=1000;
-        plansza.dodajObiekt(pozycja, new Osada(Symulacja.iSymlacjaLicznikID++, pozycja, civ.idCywilizacji));
+        Osada os = new Osada(Symulacja.iSymlacjaLicznikID++, pozycja, civ.idCywilizacji);
+        plansza.dodajObiekt(pozycja, os);
+        civ.jednostki.add(os);
+
         return 2;
     }
 
@@ -102,6 +105,7 @@ class Osadnik extends Jednostka {
        this.poprzedniaPozycja = this.pozycja;
        this.pozycja = najlepsze;
        plansza.dodajObiekt(this.pozycja, this);
+       plansza.usunObiekt(this.poprzedniaPozycja);
        return true;
    }
     public void dzialaj(Plansza plansza, Symulacja sim) {
@@ -132,20 +136,23 @@ class Osadnik extends Jednostka {
                 }
                 // jeśli nie udało się uciec — kontynuuj dalej
             }
-            // === PRÓBA ZEBRANIA SUROWCA Z SĄSIEDZTWA ===
-            List<Point> sasiedziDoZbioru = getSasiedzi(this.pozycja, Symulacja.plansza.x, Symulacja.plansza.y);
-            for (Point p : sasiedziDoZbioru) {
-                Obiekt o = plansza.zwrocPole(p.x, p.y);
-                if (o instanceof Surowiec surowiec) {
-                    zbierajSurowiec(surowiec, sim , this.idCywilizacji);
-                    Symulacja.plansza.usunObiekt(surowiec.pozycja);
-                    punkty--;
-                    break;
-                }
-            }
+
 
 
             if (!surowiecList.isEmpty()) {
+                // === PRÓBA ZEBRANIA SUROWCA Z SĄSIEDZTWA ===
+                List<Point> sasiedziDoZbioru = getSasiedzi(this.pozycja, Symulacja.plansza.x, Symulacja.plansza.y);
+                for (Point p : sasiedziDoZbioru) {
+                    Obiekt o = plansza.zwrocPole(p.x, p.y);
+                    if (o instanceof Surowiec surowiec) {
+                        zbierajSurowiec(surowiec, sim , this.idCywilizacji);
+                        Symulacja.plansza.usunObiekt(surowiec.pozycja);
+                        punkty--;
+                        break;
+                    }
+                }
+
+                System.out.println("SUROWIEC NIE PUSTY");
                 // Znajdź najbliższy surowiec
                 Surowiec najblizszy = Collections.min(surowiecList, Comparator.comparingDouble(s -> s.pozycja.distance(this.pozycja)));
 
@@ -156,6 +163,7 @@ class Osadnik extends Jednostka {
                         .collect(Collectors.toList());
 
                 if (!sasiedzi.isEmpty()) {
+                    System.out.println("SASIEDZI !is EMprt");
                     Point najlepszy = Collections.min(sasiedzi, Comparator.comparingDouble(p -> p.distance(najblizszy.pozycja)));
                     this.poprzedniaPozycja = this.pozycja;
                     this.pozycja = najlepszy;
