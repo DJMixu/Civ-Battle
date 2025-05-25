@@ -165,7 +165,7 @@ class Osadnik extends Jednostka {
                 if (!sasiedzi.isEmpty()) {
                     System.out.println("SASIEDZI !is EMprt");
                     Point najlepszy = Collections.min(sasiedzi, Comparator.comparingDouble(p -> p.distance(najblizszy.pozycja)));
-                    this.poprzedniaPozycja = this.pozycja;
+                    this.poprzedniaPozycja =  new Point(this.pozycja); ;
                     this.pozycja = najlepszy;
                     plansza.dodajObiekt(this.pozycja, this);
                     plansza.usunObiekt(this.poprzedniaPozycja);
@@ -182,7 +182,7 @@ class Osadnik extends Jednostka {
             if (sasiedzi.isEmpty()) break;
 
             Point losowy = sasiedzi.get(Symulacja.ziarno.nextInt(sasiedzi.size()));
-            this.poprzedniaPozycja = this.pozycja;
+            this.poprzedniaPozycja = new Point(this.pozycja); ;
             this.pozycja = losowy;
             plansza.dodajObiekt(this.pozycja, this);
             plansza.usunObiekt(this.poprzedniaPozycja);
