@@ -18,16 +18,16 @@ public class GridApplication extends Application {
 
     private GridPane gridPane;
     private VBox statsPanel; // Panel statystyk cywilizacji
-    private Cywilizacja Egipt; // Cywilizacja Egipt
-    private Cywilizacja Rzym; // Cywilizacja Rzym
+    // private Cywilizacja Egipt; // Cywilizacja Egipt
+    // private Cywilizacja Rzym; // Cywilizacja Rzym
 
     @Override
     public void start(Stage stage) {
         // Inicjalizacja cywilizacji
-        Egipt = new Cywilizacja(0);
-        Egipt.surowce = new int[]{100, 200, 300};
-        Rzym = new Cywilizacja(1);
-        Rzym.surowce = new int[]{2, 3, 1};
+        // Egipt = new Cywilizacja(0);
+        // Egipt.surowce = new int[]{100, 200, 300};
+        // Rzym = new Cywilizacja(1);
+        // Rzym.surowce = new int[]{2, 3, 1};
 
         // Tworzenie siatki
         gridPane = new GridPane();
