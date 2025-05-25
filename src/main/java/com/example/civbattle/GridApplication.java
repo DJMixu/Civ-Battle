@@ -17,78 +17,27 @@ import java.util.Arrays;
 public class GridApplication extends Application {
 
     private GridPane gridPane;
-    private VBox statsPanel; // Panel statystyk cywilizacji
-//    private Cywilizacja Egipt; // Cywilizacja Egipt
-//    private Cywilizacja Rzym; // Cywilizacja Rzym
-//    private Cywilizacja Grecja; // Cywilizacja Grecja
+    private VBox statsPanel; // Panel z informacjami o cywilizacjach
 
     @Override
     public void start(Stage stage) {
-//        // Inicjalizacja cywilizacji
-//        Egipt = new Cywilizacja(0);
-//        Egipt.surowce = new int[]{100, 200, 300};
-//        Rzym = new Cywilizacja(1);
-//        Rzym.surowce = new int[]{2, 3, 1};
-//        Grecja = new Cywilizacja(2);
-//        Grecja.surowce = new int[]{5, 5, 5};
-
-
-        // Tworzenie siatki
-        gridPane = new GridPane();
-        gridPane.setAlignment(Pos.CENTER); // Wyśrodkowanie siatki
-
-        // Dynamiczny odstęp po lewej stronie
-        Region leftSpacer = new Region();
-        leftSpacer.prefWidthProperty().bind(stage.widthProperty().multiply(0.1)); // 10% szerokości okna
-
-        // Kontener dla odstępu i siatki
-        HBox gridContainer = new HBox(leftSpacer, gridPane);
-        gridContainer.setAlignment(Pos.CENTER); // Wyśrodkowanie poziome siatki
-
-        // Powiązanie rozmiaru siatki z pozostałą przestrzenią
-        gridPane.prefWidthProperty().bind(stage.widthProperty().multiply(0.8));
-        gridPane.prefHeightProperty().bind(stage.heightProperty().multiply(0.8));
-
-        // Pozycjonowanie elementów
-        BorderPane root = new BorderPane();
-        root.setLeft(gridContainer);
-
-        // Przycisk zmiany rozmiaru siatki
-        Button resizeButton = new Button("Resize Grid");
-        resizeButton.setOnAction(e -> showResizeDialog());
-        root.setTop(resizeButton);
-
-        // Panel statystyk
-        statsPanel = new VBox(10);
-        statsPanel.setStyle("-fx-padding: 20; -fx-border-color: black; -fx-border-width: 2;");
-        statsPanel.setPrefWidth(300); // Stała szerokość panelu
-
-        // Domyślny rozmiar siatki
-        Symulacja initialSimulation = new Symulacja(10, 10, 2, "Ala ma kota");
-        createGrid(10, 10, initialSimulation);
-
-        // Dodanie panelu statystyk po prawej stronie
-        root.setRight(statsPanel);
-
-        // Ustawienia sceny
-        Scene scene = new Scene(root, 1280, 720);
-        stage.setTitle("Civilization Battle Simulator");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    private void showResizeDialog() {
-        // Okno dialogowe zmiany rozmiaru siatki
+        // Okno dialogowe do wprowadzenia danych od użytkownika
         Dialog<int[]> dialog = new Dialog<>();
-        dialog.setTitle("Resize Grid");
-        dialog.setHeaderText("Enter the new number of rows (N) and columns (M):\n Leave empty for a 5x5 grid.");
+        dialog.setTitle("Initialize Grid");
+        dialog.setHeaderText("Podaj liczbę wierszy (N) i kolumn (M):\nPozostaw puste, aby użyć domyślnej siatki 5x5.");
 
         TextField rowsField = new TextField();
-        rowsField.setPromptText("Rows (N)");
+        rowsField.setPromptText("Wiersze (N)");
         TextField colsField = new TextField();
-        colsField.setPromptText("Columns (M)");
+        colsField.setPromptText("Kolumny (M)");
+        TextField civField = new TextField();
+        civField.setPromptText("Liczba Cywilizacji");
 
-        VBox inputBox = new VBox(10, new Label("Rows (N):"), rowsField, new Label("Columns (M):"), colsField);
+        VBox inputBox = new VBox(10,
+                new Label("Wiersze (N):"), rowsField,
+                new Label("Kolumny (M):"), colsField,
+                new Label("Liczba Cywilizacji:"), civField
+        );
         inputBox.setAlignment(Pos.CENTER);
 
         dialog.getDialogPane().setContent(inputBox);
@@ -97,18 +46,12 @@ public class GridApplication extends Application {
 
         dialog.setResultConverter(button -> {
             if (button == okButtonType) {
-                String rowsInput = rowsField.getText().trim();
-                String colsInput = colsField.getText().trim();
-
-                if ("".equalsIgnoreCase(rowsInput) || "".equalsIgnoreCase(colsInput)) {
-                    // Domyślna siatka 5x5
-                    return new int[]{5, 5};
-                }
-
                 try {
-                    int rows = Integer.parseInt(rowsInput);
-                    int cols = Integer.parseInt(colsInput);
-                    return new int[]{rows, cols};
+                    int rows = rowsField.getText().isEmpty() ? 20 : Integer.parseInt(rowsField.getText().trim());
+                    int cols = colsField.getText().isEmpty() ? 20 : Integer.parseInt(colsField.getText().trim());
+                    int civs = civField.getText().isEmpty() ? 4 : Integer.parseInt(civField.getText().trim());
+
+                    return new int[]{rows, cols, civs};
                 } catch (NumberFormatException e) {
                     return null;
                 }
@@ -116,20 +59,73 @@ public class GridApplication extends Application {
             return null;
         });
 
-        int[] newSize = dialog.showAndWait().orElse(null);
-        if (newSize != null && newSize.length == 2) {
-            Symulacja newSimulation = new Symulacja(newSize[0], newSize[1], 2, "Ala ma kota");
-            createGrid(newSize[0], newSize[1], newSimulation);
+        int[] parameters = dialog.showAndWait().orElse(null);
+        if (parameters == null || parameters.length != 3) {
+            System.out.println("Brak poprawnych danych wejściowych. Zamykanie aplikacji.");
+            return; // Wyjście, jeśli brak poprawnych danych
         }
+
+        // Pobranie parametrów od użytkownika
+        int rows =  parameters[0];
+        int cols =  parameters[1];
+        int civs =  parameters[2];
+
+        // Inicjalizacja siatki i interfejsu użytkownika
+        gridPane = new GridPane();
+        gridPane.setAlignment(Pos.CENTER); // Wyśrodkowanie siatki
+
+        Region leftSpacer = new Region();
+        leftSpacer.prefWidthProperty().bind(stage.widthProperty().multiply(0.1)); // 10% szerokości okna
+
+        HBox gridContainer = new HBox(leftSpacer, gridPane);
+        gridContainer.setAlignment(Pos.CENTER); // Wyśrodkowanie poziome
+
+        gridPane.prefWidthProperty().bind(stage.widthProperty().multiply(0.8));
+        gridPane.prefHeightProperty().bind(stage.heightProperty().multiply(0.8));
+
+        BorderPane root = new BorderPane();
+        root.setLeft(gridContainer);
+
+        statsPanel = new VBox(10);
+        statsPanel.setStyle("-fx-padding: 20; -fx-border-color: black; -fx-border-width: 2;");
+        statsPanel.setPrefWidth(300); // Stała szerokość panelu statystyk
+
+        Symulacja initialSimulation = new Symulacja(rows, cols, civs);
+        createGrid(rows, cols, initialSimulation);
+
+        root.setRight(statsPanel);
+
+        Scene scene = new Scene(root, 1920, 1080);
+        stage.setTitle("Civilization Battle Simulator");
+        stage.setScene(scene);
+        stage.show();
     }
 
+    private String getCivilizationColor(int civId) {
+        // Przypisanie unikalnych kolorów dla każdej cywilizacji
+        return switch (civId) {
+            case 0 -> "blue";   // Egipt
+            case 1 -> "green";  // Rzym
+            case 2 -> "orange"; // Grecja
+            case 3 -> "purple"; // Chiny
+            case 4 -> "brown";  // Persja
+            case 5 -> "pink";   // Majowie
+            case 6 -> "cyan";   // Wikingowie
+            case 7 -> "yellow"; // Japonia
+            case 8 -> "gray";   // Polska
+            case 9 -> "red";    // Barbarzynca
+            default -> "black";
+        };
+    }
+
+
     private void createGrid(int rows, int cols, Symulacja symulacja) {
-        // Czyszczenie poprzedniej siatki
+        // Czyszczenie starej siatki
         gridPane.getChildren().clear();
         gridPane.getRowConstraints().clear();
         gridPane.getColumnConstraints().clear();
 
-        // Aktualizacja panelu statystyk
+        // Odświeżenie panelu statystyk
         updateStatsPanel(symulacja);
 
         // Ustawienie proporcji siatki
@@ -163,18 +159,18 @@ public class GridApplication extends Application {
                 ));
                 cell.prefHeightProperty().bind(cell.prefWidthProperty());
 
-                // Pobieranie obiektu z planszy
+                // Pobranie obiektu z planszy
                 Obiekt obiekt = symulacja.plansza.zwrocPole(j, i);
+                String borderColor = "black"; // Domyślny kolor obramowania
+                int borderWidth = 1; // Domyślna grubość obramowania
+
                 if (obiekt != null) {
                     ImageView imageView = new ImageView();
                     imageView.setPreserveRatio(true);
                     imageView.fitWidthProperty().bind(cell.prefWidthProperty());
                     imageView.fitHeightProperty().bind(cell.prefHeightProperty());
 
-                    // Use classpath resources for images
                     String imagePath = null;
-                    String borderColor = "black"; // Default border color
-                    int borderWidth = 1; // Default border width
 
                     if (obiekt instanceof Wojownik) {
                         imagePath = "/images/wojownik.png";
@@ -188,58 +184,40 @@ public class GridApplication extends Application {
                         imagePath = "/images/barbarzynca.png";
                     }
 
-                    // Assign border color and width based on civilization
+                    // Ustawienie koloru i grubości obramowania na podstawie cywilizacji
                     if (obiekt instanceof Jednostka) {
                         int civId = ((Jednostka) obiekt).idCywilizacji;
                         borderColor = getCivilizationColor(civId);
-                        borderWidth = getCivilizationBorderWidth(civId);
                     }
 
-                    // Apply border color and width
-                    cell.setStyle("-fx-border-color: " + borderColor + "; -fx-border-width: " + borderWidth + "px; -fx-background-color: white;");
+                    // Zastosowanie koloru i grubości obramowania
+                    cell.setStyle("-fx-border-color: " + borderColor + "; -fx-border-width: " + 2 + "px; -fx-background-color: white;");
 
                     if (imagePath != null) {
                         try {
                             imageView.setImage(new Image(getClass().getResource(imagePath).toExternalForm()));
                         } catch (NullPointerException e) {
-                            System.err.println("Image not found: " + imagePath);
+                            System.err.println("Nie znaleziono obrazu: " + imagePath);
                         }
                     }
 
                     StackPane stackPane = new StackPane(cell, imageView);
                     gridPane.add(stackPane, j, i);
                 } else {
+                    // Zastosowanie koloru i grubości obramowania, nawet jeśli brak obiektu
+                    cell.setStyle("-fx-border-color: " + borderColor + "; -fx-border-width: " + borderWidth + "px; -fx-background-color: white;");
                     gridPane.add(cell, j, i);
                 }
             }
         }
     }
 
-    private String getCivilizationColor(int civId) {
-        // Assign unique colors for each civilization
-        return switch (civId) {
-            case 0 -> "blue";   // Egipt
-            case 1 -> "green";    // Rzym
-            case 9 -> "red";   // Barbarzynca
-            default -> "black"; // Other civilizations
-        };
-    }
-
-    private int getCivilizationBorderWidth(int civId) {
-        // Assign unique border widths for each civilization
-        return switch (civId) {
-            case 0 -> 3;   // Egipt
-            case 1 -> 4;   // Rzym
-            case 9 -> 2;   // Barbarzynca
-            default -> 2;  // Other civilizations
-        };
-    }
 
     private void updateStatsPanel(Symulacja symulacja) {
-        // Czyszczenie poprzednich statystyk
+        // Czyszczenie starego panelu statystyk
         statsPanel.getChildren().clear();
 
-        // Statystyki dla każdej cywilizacji
+        // Wyświetlanie statystyk dla każdej cywilizacji
         for (Cywilizacja civ : symulacja.listaCywilizacji) {
             if (civ != null) {
                 statsPanel.getChildren().add(new Text("Cywilizacja: " + civ.nameCywilizacji));
@@ -256,4 +234,3 @@ public class GridApplication extends Application {
         launch();
     }
 }
-
