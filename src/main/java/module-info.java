@@ -12,6 +12,7 @@ module com.example.civbattle {
     requires com.almasb.fxgl.all;
     requires java.compiler;
     requires java.desktop;
+    requires annotations;
 
     opens com.example.civbattle to javafx.fxml;
     exports com.example.civbattle;

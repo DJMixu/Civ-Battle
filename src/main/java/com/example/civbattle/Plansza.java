@@ -39,9 +39,9 @@ public class Plansza {
         }
     }
     public void usunObiekt (Point punkt){
-        System.out.println("USUWANIE");
+        //System.out.println("USUWANIE");
         plansza[punkt.x][punkt.y] = null;
-        System.out.println("USUWANIE");
+      //  System.out.println("USUWANIE");
     }
 
     public void wypisz() {

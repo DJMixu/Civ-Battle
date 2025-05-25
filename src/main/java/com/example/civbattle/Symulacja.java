@@ -42,7 +42,6 @@ public class Symulacja {
        for (Cywilizacja civ : listaCywilizacji) {
            List<Jednostka> usun = new ArrayList<Jednostka>();
             for (Jednostka jednostka : civ.jednostki) {
-                jednostka.ruch( this);
                 if(jednostka.ruch(  this)==2){
                    usun.add(jednostka);
                 }
@@ -81,7 +80,7 @@ public class Symulacja {
             if (obiektyWZasiegu(pozycja1, 3 , plansza).isEmpty())
                 return pozycja1;
         }
-        System.out.println("Pozycja zajeta dla jednostki");
+        //System.out.println("Pozycja zajeta dla jednostki");
         return generujPozycje();
     }
 
@@ -90,7 +89,7 @@ public class Symulacja {
         if (plansza.zwrocPole(pozycja) == null) {
             return pozycja;
         }
-        System.out.println("Pozycja surowca zajeta");
+        //System.out.println("Pozycja surowca zajeta");
         return generujPozycjeSurowca();
     }
 
@@ -98,7 +97,7 @@ public class Symulacja {
         for (int i = 0; i < iLiczbaCywilizacji; i++) {
             listaCywilizacji[i] = new Cywilizacja(i);
             Point pozycja = generujPozycje();
-            System.out.println("Wygenerowane pozycje osadnik " + i);
+            //System.out.println("Wygenerowane pozycje osadnik " + i);
             listaCywilizacji[i].dodajJednostkę(new Osadnik(iSymlacjaLicznikID++, pozycja));
             listaCywilizacji[i].licznikOsadnikow++;
             listaCywilizacji[i].dodajJednostkę(new Wojownik(iSymlacjaLicznikID++, (pozycja.x < iSymulacjaX / 2 ? pozycja.x + 1 : pozycja.x - 1), pozycja.y));
@@ -110,7 +109,7 @@ public class Symulacja {
         listaCywilizacji[iLiczbaCywilizacji] = new Cywilizacja(9);
         for (int i = 0; i < iLiczbaCywilizacji; i++) {
             Point pozycja = generujPozycje();
-            System.out.println("Wygenerowane pozycje barbazynca " + i);
+            //System.out.println("Wygenerowane pozycje barbazynca " + i);
             listaCywilizacji[iLiczbaCywilizacji].dodajJednostkę(new Barbarzynca(i, pozycja));
             plansza.dodajJednostki(listaCywilizacji[iLiczbaCywilizacji].jednostki);
         }
@@ -120,7 +119,7 @@ public class Symulacja {
             Point pozycja = generujPozycjeSurowca();
             Surowiec sur = new Surowiec(iSymlacjaLicznikID++, pozycja, (ziarno.nextInt(15) + 5), ziarno.nextInt(3));
             plansza.dodajObiekt(pozycja, sur);
-            System.out.print(i + ";");
+           // System.out.print(i + ";");
         }
 
 
