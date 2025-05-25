@@ -42,7 +42,8 @@ public class Symulacja {
            List<Jednostka> usun = new ArrayList<Jednostka>();
             for (Jednostka jednostka : civ.jednostki) {
                 System.out.println("RUCH");
-                if(jednostka.ruch(  this)==2){
+                int wynik = jednostka.ruch(  this);
+                if(wynik==2 ){
                    usun.add(jednostka);
                 }
             }

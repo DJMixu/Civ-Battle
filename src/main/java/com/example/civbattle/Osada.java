@@ -16,7 +16,7 @@ public class Osada extends Jednostka {
         plansza.usunObiekt(pozycja);
     }
 
-    public void produkuj(int typ, Symulacja sim) {
+    public int produkuj(int typ, Symulacja sim) {
         List<Point> sasiedzi = getSasiedzi(this.pozycja, sim.iSymulacjaX, sim.iSymulacjaY);
         Point pustePole = new Point(-1,-1);
         for (Point point : sasiedzi) {
@@ -29,7 +29,7 @@ public class Osada extends Jednostka {
             if(typ==1){
                 Jednostka os = new Osadnik(Symulacja.iSymlacjaLicznikID , pustePole ,  this.idCywilizacji);
                 sim.plansza.dodajObiekt(pustePole , os);
-                sim.listaCywilizacji[this.idCywilizacji].jednostki.add(os);
+                return  3;
             }else{
                 Jednostka os = new Wojownik(Symulacja.iSymlacjaLicznikID , pustePole ,  this.idCywilizacji);
                 sim.plansza.dodajObiekt(pustePole , os);
