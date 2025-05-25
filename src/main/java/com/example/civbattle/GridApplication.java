@@ -230,6 +230,26 @@ public class GridApplication extends Application {
     }
 
     public static void main(String[] args) {
+        Symulacja sim = new Symulacja(60,60,3,"Ala ma kota");
+        sim.krokSymulacji();
+        sim.plansza.wypisz();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.krokSymulacji();
+        sim.plansza.wypisz();
         System.out.println("start");
         launch();
     }
