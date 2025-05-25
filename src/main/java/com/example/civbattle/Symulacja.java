@@ -11,7 +11,7 @@ public class Symulacja {
     public Cywilizacja[] listaCywilizacji;
     public int iSymulacjaX, iSymulacjaY, iLiczbaCywilizacji;
     public static Random ziarno;
-    public Plansza plansza;
+    public static Plansza plansza;
     public static int iSymlacjaLicznikID;
 
     //Domyślny start symulacji

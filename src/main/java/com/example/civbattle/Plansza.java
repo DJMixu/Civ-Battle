@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.List;
 
 public class Plansza {
-    public static Obiekt[][] plansza; 
+    public static Obiekt[][] plansza;
     int x, y;
 
     public Plansza(int px, int py) {
@@ -70,3 +70,4 @@ public class Plansza {
         }
     }
 }
+

@@ -5,8 +5,9 @@ import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Line;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -44,15 +45,9 @@ public class GridApplication extends Application {
         gridPane.prefWidthProperty().bind(stage.widthProperty().multiply(0.8));
         gridPane.prefHeightProperty().bind(stage.heightProperty().multiply(0.8));
 
-        // Pionowa linia podziału
-        Line vdiv = new Line();
-        vdiv.setStyle("-fx-stroke: black;");
-        vdiv.endYProperty().bind(stage.heightProperty());
-
         // Pozycjonowanie elementów
         BorderPane root = new BorderPane();
         root.setLeft(gridContainer);
-        root.setCenter(vdiv);
 
         // Przycisk zmiany rozmiaru siatki
         Button resizeButton = new Button("Resize Grid");
@@ -61,9 +56,12 @@ public class GridApplication extends Application {
 
         // Panel statystyk
         statsPanel = new VBox(10);
-        statsPanel.setStyle("-fx-padding: 10; -fx-border-color: black; -fx-border-width: 1;");
-        statsPanel.setPrefWidth(200); // Stała szerokość panelu
-        updateStatsPanel(); // Wypełnienie panelu danymi
+        statsPanel.setStyle("-fx-padding: 20; -fx-border-color: black; -fx-border-width: 2;");
+        statsPanel.setPrefWidth(300); // Stała szerokość panelu
+
+        // Domyślny rozmiar siatki
+        Symulacja initialSimulation = new Symulacja(10, 10, 2, "Ala ma kota");
+        createGrid(10, 10, initialSimulation);
 
         // Dodanie panelu statystyk po prawej stronie
         root.setRight(statsPanel);
@@ -73,9 +71,6 @@ public class GridApplication extends Application {
         stage.setTitle("Civilization Battle Simulator");
         stage.setScene(scene);
         stage.show();
-
-        // Domyślny rozmiar siatki
-        createGrid(10, 10);
     }
 
     private void showResizeDialog() {
@@ -119,15 +114,19 @@ public class GridApplication extends Application {
 
         int[] newSize = dialog.showAndWait().orElse(null);
         if (newSize != null && newSize.length == 2) {
-            createGrid(newSize[0], newSize[1]);
+            Symulacja newSimulation = new Symulacja(newSize[0], newSize[1], 2, "Ala ma kota");
+            createGrid(newSize[0], newSize[1], newSimulation);
         }
     }
 
-    private void createGrid(int rows, int cols) {
+    private void createGrid(int rows, int cols, Symulacja symulacja) {
         // Czyszczenie poprzedniej siatki
         gridPane.getChildren().clear();
         gridPane.getRowConstraints().clear();
         gridPane.getColumnConstraints().clear();
+
+        // Aktualizacja panelu statystyk
+        updateStatsPanel(symulacja);
 
         // Ustawienie proporcji siatki
         gridPane.maxWidthProperty().bind(Bindings.min(gridPane.prefWidthProperty(), gridPane.prefHeightProperty()));
@@ -160,36 +159,97 @@ public class GridApplication extends Application {
                 ));
                 cell.prefHeightProperty().bind(cell.prefWidthProperty());
 
-                gridPane.add(cell, j, i);
+                // Pobieranie obiektu z planszy
+                Obiekt obiekt = symulacja.plansza.zwrocPole(j, i);
+                if (obiekt != null) {
+                    ImageView imageView = new ImageView();
+                    imageView.setPreserveRatio(true);
+                    imageView.fitWidthProperty().bind(cell.prefWidthProperty());
+                    imageView.fitHeightProperty().bind(cell.prefHeightProperty());
+
+                    // Use classpath resources for images
+                    String imagePath = null;
+                    String borderColor = "black"; // Default border color
+                    int borderWidth = 1; // Default border width
+
+                    if (obiekt instanceof Wojownik) {
+                        imagePath = "/images/wojownik.png";
+                    } else if (obiekt instanceof Osadnik) {
+                        imagePath = "/images/osadnik.png";
+                    } else if (obiekt instanceof Surowiec) {
+                        imagePath = "/images/surowiec.png";
+                    } else if (obiekt instanceof Osada) {
+                        imagePath = "/images/osada.png";
+                    } else if (obiekt instanceof Barbarzynca) {
+                        imagePath = "/images/barbarzynca.png";
+                    }
+
+                    // Assign border color and width based on civilization
+                    if (obiekt instanceof Jednostka) {
+                        int civId = ((Jednostka) obiekt).idCywilizacji;
+                        borderColor = getCivilizationColor(civId);
+                        borderWidth = getCivilizationBorderWidth(civId);
+                    }
+
+                    // Apply border color and width
+                    cell.setStyle("-fx-border-color: " + borderColor + "; -fx-border-width: " + borderWidth + "px; -fx-background-color: white;");
+
+                    if (imagePath != null) {
+                        try {
+                            imageView.setImage(new Image(getClass().getResource(imagePath).toExternalForm()));
+                        } catch (NullPointerException e) {
+                            System.err.println("Image not found: " + imagePath);
+                        }
+                    }
+
+                    StackPane stackPane = new StackPane(cell, imageView);
+                    gridPane.add(stackPane, j, i);
+                } else {
+                    gridPane.add(cell, j, i);
+                }
             }
         }
     }
 
-    private void updateStatsPanel() {
-        statsPanel.getChildren().clear(); // Czyszczenie poprzednich statystyk
+    private String getCivilizationColor(int civId) {
+        // Assign unique colors for each civilization
+        return switch (civId) {
+            case 0 -> "blue";   // Egipt
+            case 1 -> "green";    // Rzym
+            case 9 -> "red";   // Barbarzynca
+            default -> "black"; // Other civilizations
+        };
+    }
 
-        // Statystyki Egiptu
-        statsPanel.getChildren().add(new Text("Cywilizacja: " + Egipt.nameCywilizacji));
-        statsPanel.getChildren().add(new Text("Surowce: " + Arrays.toString(Egipt.surowce)));
-        statsPanel.getChildren().add(new Text("Jednostki: " + (Egipt.jednostki != null ? Egipt.jednostki.size() : 0)));
-        statsPanel.getChildren().add(new Text("Osady: " + (Egipt.osady != null ? Egipt.osady.size() : 0)));
-        statsPanel.getChildren().add(new Separator());
+    private int getCivilizationBorderWidth(int civId) {
+        // Assign unique border widths for each civilization
+        return switch (civId) {
+            case 0 -> 3;   // Egipt
+            case 1 -> 4;   // Rzym
+            case 9 -> 2;   // Barbarzynca
+            default -> 2;  // Other civilizations
+        };
+    }
 
-        // Statystyki Rzymu
-        statsPanel.getChildren().add(new Text("Cywilizacja: " + Rzym.nameCywilizacji));
-        statsPanel.getChildren().add(new Text("Surowce: " + Arrays.toString(Rzym.surowce)));
-        statsPanel.getChildren().add(new Text("Jednostki: " + (Rzym.jednostki != null ? Rzym.jednostki.size() : 0)));
-        statsPanel.getChildren().add(new Text("Osady: " + (Rzym.osady != null ? Rzym.osady.size() : 0)));
-        statsPanel.getChildren().add(new Separator());
+    private void updateStatsPanel(Symulacja symulacja) {
+        // Czyszczenie poprzednich statystyk
+        statsPanel.getChildren().clear();
+
+        // Statystyki dla każdej cywilizacji
+        for (Cywilizacja civ : symulacja.listaCywilizacji) {
+            if (civ != null) {
+                statsPanel.getChildren().add(new Text("Cywilizacja: " + civ.nameCywilizacji));
+                statsPanel.getChildren().add(new Text("Surowce: " + Arrays.toString(civ.surowce)));
+                statsPanel.getChildren().add(new Text("Jednostki: " + (civ.jednostki != null ? civ.jednostki.size() : 0)));
+                statsPanel.getChildren().add(new Text("Osady: " + (civ.osady != null ? civ.osady.size() : 0)));
+                statsPanel.getChildren().add(new Separator());
+            }
+        }
     }
 
     public static void main(String[] args) {
         System.out.println("start");
-        Symulacja symulacja = new Symulacja(90, 20, 5, "Ala ma kota");
-        symulacja.krokSymulacji();
-        symulacja.plansza.wypisz();
         launch();
-
     }
 }
 
