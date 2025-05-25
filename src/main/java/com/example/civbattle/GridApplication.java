@@ -1,5 +1,7 @@
 package com.example.civbattle;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
@@ -11,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.Arrays;
 
@@ -18,6 +21,7 @@ public class GridApplication extends Application {
 
     private GridPane gridPane;
     private VBox statsPanel; // Panel z informacjami o cywilizacjach
+    private Timeline simulationTimeline; // Automatyczna aktualizacja siatki
 
     @Override
     public void start(Stage stage) {
@@ -93,12 +97,28 @@ public class GridApplication extends Application {
         Symulacja initialSimulation = new Symulacja(rows, cols, civs);
         createGrid(rows, cols, initialSimulation);
 
+        // Ustawienie automatycznej aktualizacji siatki co 0.5 sekundy
+        simulationTimeline = new Timeline(new KeyFrame(Duration.seconds(0.5), event -> {
+            initialSimulation.krokSymulacji();
+            createGrid(rows, cols, initialSimulation);
+        }));
+        simulationTimeline.setCycleCount(Timeline.INDEFINITE);
+        simulationTimeline.play();
+
         root.setRight(statsPanel);
 
         Scene scene = new Scene(root, 1920, 1080);
         stage.setTitle("Civilization Battle Simulator");
         stage.setScene(scene);
         stage.show();
+    }
+
+    @Override
+    public void stop() {
+        // Zatrzymanie symulacji przy zamknięciu aplikacji
+        if (simulationTimeline != null) {
+            simulationTimeline.stop();
+        }
     }
 
     private String getCivilizationColor(int civId) {
@@ -230,26 +250,6 @@ public class GridApplication extends Application {
     }
 
     public static void main(String[] args) {
-        Symulacja sim = new Symulacja(20,20,3,"Ala ma kota");
-        sim.krokSymulacji();
-        sim.plansza.wypisz();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.krokSymulacji();
-        sim.plansza.wypisz();
         System.out.println("start");
         launch();
     }
