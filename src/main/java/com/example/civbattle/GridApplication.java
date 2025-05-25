@@ -18,8 +18,9 @@ public class GridApplication extends Application {
 
     private GridPane gridPane;
     private VBox statsPanel; // Panel statystyk cywilizacji
-    private Cywilizacja Egipt; // Cywilizacja Egipt
-    private Cywilizacja Rzym; // Cywilizacja Rzym
+//    private Cywilizacja Egipt; // Cywilizacja Egipt
+//    private Cywilizacja Rzym; // Cywilizacja Rzym
+//    private Cywilizacja Grecja; // Cywilizacja Grecja
 
     @Override
     public void start(Stage stage) {
