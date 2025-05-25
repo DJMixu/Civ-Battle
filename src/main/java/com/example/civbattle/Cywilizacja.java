@@ -16,7 +16,7 @@ class Cywilizacja {
     public Cywilizacja(int pID) {
         idCywilizacji = pID;
         String[] nazwyCywilizacji = {
-                "Egipt", "Rzym", "Grecja", "Chiny", "Persja", "Majowie", "Wikingowie", "Japonia", "Polska", "Barbażyńcy"
+                "Egipt", "Rzym", "Grecja", "Chiny", "Persja", "Majowie", "Wikingowie", "Japonia", "Polska", "Barbarzyńcy"
         };
         nameCywilizacji = nazwyCywilizacji[pID];
         licznikOsadnikow = 0;
