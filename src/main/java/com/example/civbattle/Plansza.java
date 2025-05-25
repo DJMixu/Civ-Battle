@@ -4,8 +4,8 @@ import java.awt.*;
 import java.util.List;
 
 public class Plansza {
-    private Obiekt[][] plansza;
-    int x , y;
+    public static Obiekt[][] plansza; 
+    int x, y;
 
     public Plansza(int px, int py) {
         plansza = new Obiekt[px][py];
