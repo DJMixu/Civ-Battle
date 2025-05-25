@@ -51,8 +51,8 @@ public class GridApplication extends Application {
         dialog.setResultConverter(button -> {
             if (button == okButtonType) {
                 try {
-                    int rows = rowsField.getText().isEmpty() ? 20 : Integer.parseInt(rowsField.getText().trim());
-                    int cols = colsField.getText().isEmpty() ? 20 : Integer.parseInt(colsField.getText().trim());
+                    int rows = rowsField.getText().isEmpty() ? 24 : Integer.parseInt(rowsField.getText().trim());
+                    int cols = colsField.getText().isEmpty() ? 24 : Integer.parseInt(colsField.getText().trim());
                     int civs = civField.getText().isEmpty() ? 4 : Integer.parseInt(civField.getText().trim());
 
                     return new int[]{rows, cols, civs};
@@ -124,18 +124,20 @@ public class GridApplication extends Application {
     private String getCivilizationColor(int civId) {
         // Przypisanie unikalnych kolorów dla każdej cywilizacji
         return switch (civId) {
-            case 0 -> "blue";   // Egipt
-            case 1 -> "green";  // Rzym
-            case 2 -> "orange"; // Grecja
-            case 3 -> "purple"; // Chiny
-            case 4 -> "brown";  // Persja
-            case 5 -> "pink";   // Majowie
-            case 6 -> "cyan";   // Wikingowie
-            case 7 -> "yellow"; // Japonia
-            case 8 -> "gray";   // Polska
-            case 9 -> "red";    // Barbarzynca
-            default -> "black";
+            case 0 -> "#0044cc"; // Egipt
+            case 1 -> "#008800"; // Rzym
+            case 2 -> "#ff6600"; // Grecja
+            case 3 -> "#800080"; // Chiny
+            case 4 -> "#5c4033"; // Persja
+            case 5 -> "#cc0066"; // Majowie
+            case 6 -> "#008b8b"; // Wikingowie
+            case 7 -> "#b59f00"; // Japonia
+            case 8 -> "#555555"; // Polska
+            case 9 -> "#cc0000"; // Barbarzyńca
+            default -> "#000000"; // Domyślnie czarny
         };
+
+
     }
 
 
@@ -224,7 +226,7 @@ public class GridApplication extends Application {
                     }
 
                     // Zastosowanie koloru i grubości obramowania
-                    cell.setStyle("-fx-border-color: " + borderColor + "; -fx-border-width: " + 2 + "px; -fx-background-color: white;");
+                    cell.setStyle("-fx-border-color: " + borderColor + "; -fx-border-width: " + 3 + "px; -fx-background-color: white;");
 
                     if (imagePath != null) {
                         try {
