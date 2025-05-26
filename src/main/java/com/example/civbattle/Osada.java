@@ -49,7 +49,7 @@ public class Osada extends Jednostka {
         Cywilizacja civ = sim.listaCywilizacji[this.idCywilizacji];
 
         if (this.zycie < 50) {
-            this.zycie = Math.min(50, this.zycie + 5);
+            this.zycie = Math.min(50, this.zycie + 1);
         }
 
         if (this.zycie <= 0) {

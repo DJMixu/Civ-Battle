@@ -10,13 +10,13 @@ class Wojownik extends Jednostka {
     public Wojownik(int id, int pX, int pY , int civ) {
         super(id, pX, pY);
         this.zycie = 30;
-        this.atak = 10;
+        this.atak = 5;
         this.idCywilizacji = civ;
     }
     public Wojownik(int id, Point point , int civ) {
         super(id, point);
         this.zycie = 30;
-        this.atak = 10;
+        this.atak = 5;
         this.idCywilizacji = civ;
     }
 
