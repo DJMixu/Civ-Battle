@@ -278,12 +278,14 @@ public class CivBattler extends Application {
                     surowceBox.getChildren().add(label);
                 }
 
-                Text jednostki = new Text("Jednostki: " + (civ.jednostki != null ? civ.jednostki.size() : 0));
+                Text jednostki = new Text("Osadnicy: " + (civ.licznikOsadnikow));
                 jednostki.setStyle("-fx-fill: " + color + ";");
-                Text osady = new Text("Osady: " + (civ.osady != null ? civ.osady.size() : 0));
+                Text wojownicy = new Text("Wojownicy: " + (civ.licznikWojownikow));
+                wojownicy.setStyle("-fx-fill: " + color + ";");
+                Text osady = new Text("Osady: " + (civ.licznikOsad));
                 osady.setStyle("-fx-fill: " + color + ";");
 
-                statsPanel.getChildren().addAll(civName, surowceBox, jednostki, osady, new Separator());
+                statsPanel.getChildren().addAll(civName, surowceBox, jednostki, wojownicy, osady, new Separator());
             }
         }
     }
