@@ -26,7 +26,7 @@ public class CivBattler extends Application {
         // Okno dialogowe do wprowadzenia danych od użytkownika
         Dialog<int[]> dialog = new Dialog<>();
         dialog.setTitle("Stwórz Siatkę");
-        dialog.setHeaderText("Podaj liczbę wierszy (N) i kolumn (M):\nPozostaw puste, aby użyć domyślnej siatki.");
+        dialog.setHeaderText("Podaj parametry symulacji:\nPozostaw puste, aby użyć domyślnych 20x20 - 3 cywilizacje.");
 
         TextField rowsField = new TextField();
         rowsField.setPromptText("Wiersze (N)");
@@ -34,11 +34,14 @@ public class CivBattler extends Application {
         colsField.setPromptText("Kolumny (M)");
         TextField civField = new TextField();
         civField.setPromptText("Liczba Cywilizacji");
+        TextField seedField = new TextField();
+        seedField.setPromptText("Podaj seed cyfrowy (opcjonalnie)");
 
         VBox inputBox = new VBox(10,
                 new Label("Wiersze (N):"), rowsField,
                 new Label("Kolumny (M):"), colsField,
-                new Label("Liczba Cywilizacji:"), civField
+                new Label("Liczba Cywilizacji:"), civField,
+                new Label("Podaj seed cyfrowy (opcjonalnie):"), seedField
         );
         inputBox.setAlignment(Pos.CENTER);
 
@@ -52,8 +55,9 @@ public class CivBattler extends Application {
                     int rows = rowsField.getText().isEmpty() ? 24 : Integer.parseInt(rowsField.getText().trim());
                     int cols = colsField.getText().isEmpty() ? 24 : Integer.parseInt(colsField.getText().trim());
                     int civs = civField.getText().isEmpty() ? 4 : Integer.parseInt(civField.getText().trim());
+                    int seed = seedField.getText().isEmpty() ? -1 : Integer.parseInt(seedField.getText().trim());
 
-                    return new int[]{rows, cols, civs};
+                    return new int[]{rows, cols, civs,seed};
                 } catch (NumberFormatException e) {
                     return null;
                 }
@@ -62,7 +66,7 @@ public class CivBattler extends Application {
         });
 
         int[] parameters = dialog.showAndWait().orElse(null);
-        if (parameters == null || parameters.length != 3) {
+        if (parameters == null || parameters.length != 4) {
             System.out.println("Brak poprawnych danych wejściowych. Zamykanie aplikacji.");
             return; // Wyjście, jeśli brak poprawnych danych
         }
@@ -71,6 +75,8 @@ public class CivBattler extends Application {
         int rows = parameters[0];
         int cols = parameters[1];
         int civs = parameters[2];
+        String seed = Integer.toString(parameters[3]);
+
 
         // Inicjalizacja siatki i interfejsu użytkownika
         gridPane = new GridPane();
@@ -92,7 +98,7 @@ public class CivBattler extends Application {
         statsPanel.setStyle("-fx-padding: 20; -fx-border-color: black; -fx-border-width: 2;");
         statsPanel.setPrefWidth(300); // Stała szerokość panelu statystyk
 
-        Symulacja initialSimulation = new Symulacja(rows, cols, civs);
+        Symulacja initialSimulation = new Symulacja(rows, cols, civs, seed);
         createGrid(rows, cols, initialSimulation);
 
         // Ustawienie automatycznej aktualizacji siatki co 0.5 sekundy
@@ -180,7 +186,7 @@ public class CivBattler extends Application {
                 cell.prefHeightProperty().bind(cell.prefWidthProperty());
 
                 // Pobranie obiektu z planszy
-                Obiekt obiekt = symulacja.plansza.zwrocPole(j, i);
+                Obiekt obiekt = symulacja.plansza.zwrocPole(i, j);
                 String borderColor = "black"; // Domyślny kolor obramowania
                 int borderWidth = 1; // Domyślna grubość obramowania
 
