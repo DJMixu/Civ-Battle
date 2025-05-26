@@ -18,12 +18,12 @@ import javafx.util.Duration;
 public class CivBattler extends Application {
 
     private GridPane gridPane;
-    private VBox statsPanel; // Panel z informacjami o cywilizacjach
-    private Timeline simulationTimeline; // Automatyczna aktualizacja siatki
+    private VBox statsPanel;
+    private Timeline simulationTimeline;
 
     @Override
     public void start(Stage stage) {
-        // Okno dialogowe do wprowadzenia danych od użytkownika
+        // okno dialogowe
         Dialog<int[]> dialog = new Dialog<>();
         dialog.setTitle("Stwórz Siatkę");
         dialog.setHeaderText("Podaj parametry symulacji:\nPozostaw puste, aby użyć domyślnych 20x20 - 3 cywilizacje.");
@@ -68,30 +68,52 @@ public class CivBattler extends Application {
         int[] parameters = dialog.showAndWait().orElse(null);
         if (parameters == null || parameters.length != 4) {
             System.out.println("Brak poprawnych danych wejściowych. Zamykanie aplikacji.");
-            return; // Wyjście, jeśli brak poprawnych danych
+            return;
         }
 
-        // Pobranie parametrów od użytkownika
+
         int rows = parameters[0];
         int cols = parameters[1];
         int civs = parameters[2];
         String seed = Integer.toString(parameters[3]);
 
 
-        // Inicjalizacja siatki i interfejsu użytkownika
+        // inicjalizacja GUI
         gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
+
+        // stop start button
+        Button toggleButton = new Button("⏸ Stop");
+        toggleButton.setStyle("-fx-font-size: 16px; -fx-padding: 8 16 8 16;");
+        toggleButton.setAlignment(Pos.CENTER_LEFT);
+        toggleButton.setOnAction(e -> {
+            if (simulationTimeline.getStatus() == Timeline.Status.RUNNING) {
+                simulationTimeline.pause();
+                toggleButton.setText("▶ Start");
+            } else {
+                simulationTimeline.play();
+                toggleButton.setText("⏸ Stop");
+            }
+        });
+
+        HBox topBar = new HBox(toggleButton);
+        topBar.setAlignment(Pos.TOP_RIGHT);
+        topBar.setStyle("-fx-padding: 10 0 0 10;");
+
+        VBox gridWithButton = new VBox(10, gridPane);
+        gridWithButton.setAlignment(Pos.CENTER);
 
         Region leftSpacer = new Region();
         leftSpacer.prefWidthProperty().bind(stage.widthProperty().multiply(0.1));
 
-        HBox gridContainer = new HBox(leftSpacer, gridPane);
+        HBox gridContainer = new HBox(leftSpacer, gridWithButton);
         gridContainer.setAlignment(Pos.CENTER);
 
         gridPane.prefWidthProperty().bind(stage.widthProperty().multiply(0.8));
         gridPane.prefHeightProperty().bind(stage.heightProperty().multiply(0.8));
 
         BorderPane root = new BorderPane();
+        root.setTop(topBar);
         root.setLeft(gridContainer);
 
         statsPanel = new VBox(10);
@@ -101,7 +123,7 @@ public class CivBattler extends Application {
         Symulacja initialSimulation = new Symulacja(rows, cols, civs, seed);
         createGrid(rows, cols, initialSimulation);
 
-        // Ustawienie automatycznej aktualizacji siatki co 0.5 sekundy
+        // stopklatka - animacja
         simulationTimeline = new Timeline(new KeyFrame(Duration.seconds(0.5), event -> {
             initialSimulation.krokSymulacji();
             createGrid(rows, cols, initialSimulation);
@@ -119,14 +141,12 @@ public class CivBattler extends Application {
 
     @Override
     public void stop() {
-        // Zatrzymanie symulacji przy zamknięciu aplikacji
         if (simulationTimeline != null) {
             simulationTimeline.stop();
         }
     }
-
+    //kolory cywilizacji
     private String getCivilizationColor(int civId) {
-        // Przypisanie unikalnych kolorów dla każdej cywilizacji
         return switch (civId) {
             case 0 -> "#0044cc"; // Egipt
             case 1 -> "#008800"; // Rzym
@@ -146,49 +166,44 @@ public class CivBattler extends Application {
 
 
     private void createGrid(int rows, int cols, Symulacja symulacja) {
-        // Czyszczenie starej siatki
+        // czyszczenie starej siatki
         gridPane.getChildren().clear();
         gridPane.getRowConstraints().clear();
         gridPane.getColumnConstraints().clear();
 
-        // Odświeżenie panelu statystyk
         updateStatsPanel(symulacja);
 
-        // Ustawienie proporcji siatki
         gridPane.maxWidthProperty().bind(Bindings.min(gridPane.prefWidthProperty(), gridPane.prefHeightProperty()));
         gridPane.maxHeightProperty().bind(gridPane.maxWidthProperty());
 
-        // Dodanie wierszy
+
         for (int i = 0; i < rows; i++) {
             RowConstraints rowConstraints = new RowConstraints();
             rowConstraints.setPercentHeight(100.0 / rows);
             gridPane.getRowConstraints().add(rowConstraints);
         }
 
-        // Dodanie kolumn
         for (int j = 0; j < cols; j++) {
             ColumnConstraints colConstraints = new ColumnConstraints();
             colConstraints.setPercentWidth(100.0 / cols);
             gridPane.getColumnConstraints().add(colConstraints);
         }
 
-        // Tworzenie komórek siatki
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 Region cell = new Region();
                 cell.setStyle("-fx-border-color: black; -fx-background-color: white;");
 
-                // Kwadratowe komórki
+
                 cell.prefWidthProperty().bind(Bindings.min(
                         gridPane.widthProperty().divide(cols),
                         gridPane.heightProperty().divide(rows)
                 ));
                 cell.prefHeightProperty().bind(cell.prefWidthProperty());
 
-                // Pobranie obiektu z planszy
                 Obiekt obiekt = symulacja.plansza.zwrocPole(i, j);
-                String borderColor = "black"; // Domyślny kolor obramowania
-                int borderWidth = 1; // Domyślna grubość obramowania
+                String borderColor = "black";
+                int borderWidth = 1;
 
                 if (obiekt != null) {
                     ImageView imageView = new ImageView();
@@ -223,13 +238,13 @@ public class CivBattler extends Application {
                         imagePath = "/images/barbarzynca.png";
                     }
 
-                    // Ustawienie koloru i grubości obramowania na podstawie cywilizacji
+
                     if (obiekt instanceof Jednostka) {
                         int civId = ((Jednostka) obiekt).idCywilizacji;
                         borderColor = getCivilizationColor(civId);
                     }
 
-                    // Zastosowanie koloru i grubości obramowania
+
                     cell.setStyle("-fx-border-color: " + borderColor + "; -fx-border-width: " + 3 + "px; -fx-background-color: white;");
 
                     if (imagePath != null) {
@@ -243,7 +258,7 @@ public class CivBattler extends Application {
                     StackPane stackPane = new StackPane(cell, imageView);
                     gridPane.add(stackPane, j, i);
                 } else {
-                    // Zastosowanie koloru i grubości obramowania, nawet jeśli brak obiektu
+
                     cell.setStyle("-fx-border-color: " + borderColor + "; -fx-border-width: " + borderWidth + "px; -fx-background-color: white;");
                     gridPane.add(cell, j, i);
                 }
@@ -261,7 +276,7 @@ public class CivBattler extends Application {
                 Text civName = new Text("Cywilizacja: " + civ.nameCywilizacji);
                 civName.setStyle("-fx-fill: " + color + "; -fx-font-weight: bold;");
 
-                // Surowce z obrazkami
+                // surowce z obrazkami
                 HBox surowceBox = new HBox(10);
                 surowceBox.setAlignment(Pos.CENTER_LEFT);
 
@@ -283,7 +298,7 @@ public class CivBattler extends Application {
                     surowceBox.getChildren().add(label);
                 }
 
-                // Jednostki i osady z obrazkami
+                // jednostki z obrazkami
                 HBox jednostkiBox = new HBox(10);
                 jednostkiBox.setAlignment(Pos.CENTER_LEFT);
 
@@ -350,7 +365,7 @@ public class CivBattler extends Application {
     }
 
     public static void main(String[] args) {
-        System.out.println("start");
+        System.out.println("START");
         launch();
     }
 }
