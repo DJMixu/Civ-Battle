@@ -29,17 +29,17 @@ public class CivBattler extends Application {
         dialog.setHeaderText("Podaj parametry symulacji:\nPozostaw puste, aby użyć domyślnych 20x20 - 3 cywilizacje.");
 
         TextField rowsField = new TextField();
-        rowsField.setPromptText("Wiersze (N)");
+        rowsField.setPromptText("Wiersze");
         TextField colsField = new TextField();
-        colsField.setPromptText("Kolumny (M)");
+        colsField.setPromptText("Kolumny");
         TextField civField = new TextField();
-        civField.setPromptText("Liczba Cywilizacji");
+        civField.setPromptText("Liczba Cywilizacji max 9 (opcjonalnie)");
         TextField seedField = new TextField();
         seedField.setPromptText("Podaj seed cyfrowy (opcjonalnie)");
 
         VBox inputBox = new VBox(10,
-                new Label("Wiersze (N):"), rowsField,
-                new Label("Kolumny (M):"), colsField,
+                new Label("Wiersze:"), rowsField,
+                new Label("Kolumny:"), colsField,
                 new Label("Liczba Cywilizacji:"), civField,
                 new Label("Podaj seed cyfrowy (opcjonalnie):"), seedField
         );
@@ -57,7 +57,7 @@ public class CivBattler extends Application {
                     int civs = civField.getText().isEmpty() ? 4 : Integer.parseInt(civField.getText().trim());
                     int seed = seedField.getText().isEmpty() ? -1 : Integer.parseInt(seedField.getText().trim());
 
-                    return new int[]{rows, cols, civs,seed};
+                    return new int[]{rows, cols, civs, seed};
                 } catch (NumberFormatException e) {
                     return null;
                 }
@@ -80,13 +80,13 @@ public class CivBattler extends Application {
 
         // Inicjalizacja siatki i interfejsu użytkownika
         gridPane = new GridPane();
-        gridPane.setAlignment(Pos.CENTER); // Wyśrodkowanie siatki
+        gridPane.setAlignment(Pos.CENTER);
 
         Region leftSpacer = new Region();
-        leftSpacer.prefWidthProperty().bind(stage.widthProperty().multiply(0.1)); // 10% szerokości okna
+        leftSpacer.prefWidthProperty().bind(stage.widthProperty().multiply(0.1));
 
         HBox gridContainer = new HBox(leftSpacer, gridPane);
-        gridContainer.setAlignment(Pos.CENTER); // Wyśrodkowanie poziome
+        gridContainer.setAlignment(Pos.CENTER);
 
         gridPane.prefWidthProperty().bind(stage.widthProperty().multiply(0.8));
         gridPane.prefHeightProperty().bind(stage.heightProperty().multiply(0.8));
@@ -265,7 +265,6 @@ public class CivBattler extends Application {
                 HBox surowceBox = new HBox(10);
                 surowceBox.setAlignment(Pos.CENTER_LEFT);
 
-
                 String[] imgPaths = {"/images/stone.png", "/images/drzewo.png", "/images/ETCS.png"};
                 String[] tooltips = {"Kamień", "Drewno", "Złoto"};
 
@@ -284,12 +283,68 @@ public class CivBattler extends Application {
                     surowceBox.getChildren().add(label);
                 }
 
-                Text jednostki = new Text("Jednostki: " + (civ.jednostki != null ? civ.jednostki.size() : 0));
-                jednostki.setStyle("-fx-fill: " + color + ";");
-                Text osady = new Text("Osady: " + (civ.osady != null ? civ.osady.size() : 0));
-                osady.setStyle("-fx-fill: " + color + ";");
+                // Jednostki i osady z obrazkami
+                HBox jednostkiBox = new HBox(10);
+                jednostkiBox.setAlignment(Pos.CENTER_LEFT);
 
-                statsPanel.getChildren().addAll(civName, surowceBox, jednostki, osady, new Separator());
+                if (civ.idCywilizacji == 9) {
+                    // Barbarzyńcy:
+                    ImageView barbarzyncaIcon = new ImageView();
+                    try {
+                        barbarzyncaIcon.setImage(new Image(getClass().getResource("/images/barbarzynca.png").toExternalForm()));
+                    } catch (Exception e) {
+                    }
+                    barbarzyncaIcon.setFitWidth(24);
+                    barbarzyncaIcon.setFitHeight(24);
+                    Label barbarzyncaLabel = new Label(String.valueOf(civ.licznikWojownikow), barbarzyncaIcon);
+                    barbarzyncaLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
+                    barbarzyncaLabel.setContentDisplay(ContentDisplay.LEFT);
+                    barbarzyncaLabel.setTooltip(new Tooltip("Barbarzyńcy"));
+                    jednostkiBox.getChildren().add(barbarzyncaLabel);
+                } else {
+                    // Wojownicy
+                    ImageView wojownikIcon = new ImageView();
+                    try {
+                        wojownikIcon.setImage(new Image(getClass().getResource("/images/wojownik.png").toExternalForm()));
+                    } catch (Exception e) {
+                    }
+                    wojownikIcon.setFitWidth(24);
+                    wojownikIcon.setFitHeight(24);
+                    Label wojownikLabel = new Label(String.valueOf(civ.licznikWojownikow), wojownikIcon);
+                    wojownikLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
+                    wojownikLabel.setContentDisplay(ContentDisplay.LEFT);
+                    wojownikLabel.setTooltip(new Tooltip("Wojownicy"));
+
+                    // Osadnicy
+                    ImageView osadnikIcon = new ImageView();
+                    try {
+                        osadnikIcon.setImage(new Image(getClass().getResource("/images/osadnik.png").toExternalForm()));
+                    } catch (Exception e) {
+                    }
+                    osadnikIcon.setFitWidth(24);
+                    osadnikIcon.setFitHeight(24);
+                    Label osadnikLabel = new Label(String.valueOf(civ.licznikOsadnikow), osadnikIcon);
+                    osadnikLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
+                    osadnikLabel.setContentDisplay(ContentDisplay.LEFT);
+                    osadnikLabel.setTooltip(new Tooltip("Osadnicy"));
+
+                    // Osady
+                    ImageView osadaIcon = new ImageView();
+                    try {
+                        osadaIcon.setImage(new Image(getClass().getResource("/images/osada.png").toExternalForm()));
+                    } catch (Exception e) {
+                    }
+                    osadaIcon.setFitWidth(24);
+                    osadaIcon.setFitHeight(24);
+                    Label osadaLabel = new Label(String.valueOf(civ.licznikOsad), osadaIcon);
+                    osadaLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
+                    osadaLabel.setContentDisplay(ContentDisplay.LEFT);
+                    osadaLabel.setTooltip(new Tooltip("Osady"));
+
+                    jednostkiBox.getChildren().addAll(wojownikLabel, osadnikLabel, osadaLabel);
+                }
+
+                statsPanel.getChildren().addAll(civName, surowceBox, jednostkiBox, new Separator());
             }
         }
     }
@@ -299,3 +354,4 @@ public class CivBattler extends Application {
         launch();
     }
 }
+
