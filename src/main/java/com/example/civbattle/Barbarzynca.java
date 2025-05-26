@@ -19,16 +19,6 @@ class Barbarzynca extends Jednostka {
         this.atak = 8;
     }
 
-    int atak(Point pozycjaCel, Symulacja sim) {
-        Jednostka cel = (Jednostka) sim.plansza.zwrocPole(pozycjaCel);
-        if (cel.zycie > 0) {
-            cel.zycie -= atak;
-            return 5;
-        } else {
-            return 4;
-        }
-    }
-
     int smierc(Plansza plansza, Cywilizacja civ) {
         civ.licznikWojownikow--;
         plansza.usunObiekt(pozycja);

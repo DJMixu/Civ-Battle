@@ -42,23 +42,23 @@ public class Symulacja {
         licznikTur++;
         for (Cywilizacja civ : listaCywilizacji) {
             List<Jednostka> jednostkiKopia = new ArrayList<>(civ.jednostki);
-            civ.wypiszDane();
+            //civ.wypiszDane();
             for (Jednostka jednostka : jednostkiKopia) {
                 jednostka.ruch(this);
             }
         }
         if(licznikTur>10 && licznikTur%2==0)uzupelnijSurowce();
-        plansza.wypisz();
-        System.out.println("KROK");
+        //plansza.wypisz();
+        //System.out.println("KROK");
         return 1;
     }
 
     public int startSymulacji(int pX, int pY, int plCywilizacji, String pSeed) {
         iSymlacjaLicznikID = 0;
-        if (plCywilizacji > 8) {
+        /*if (plCywilizacji > 8) {
             System.out.println("Maksymlanie 9 cywilizacji");
             plCywilizacji = 8;
-        }
+        }*/
 
         ziarno = new Random(pSeed.hashCode());
         iSymulacjaX = pX;

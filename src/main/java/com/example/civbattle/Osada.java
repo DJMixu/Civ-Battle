@@ -13,7 +13,7 @@ public class Osada extends Jednostka {
 
     void smierc(Plansza plansza, Cywilizacja civ) {
         civ.licznikOsad--;
-        System.out.println(this.id + " osada usunięta");
+        //System.out.println(this.id + " osada usunięta");
         plansza.usunObiekt(pozycja);
         civ.jednostki.remove(this);
     }

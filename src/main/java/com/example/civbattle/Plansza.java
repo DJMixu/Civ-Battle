@@ -58,7 +58,7 @@ public class Plansza {
         plansza[punkt.x][punkt.y] = null;
         //  System.out.println("USUWANIE");
     }
-
+    //Funkcja do testów
     public void wypisz() {
         int szer = plansza.length;
         int wys = plansza[0].length;
@@ -81,7 +81,7 @@ public class Plansza {
                     System.out.print("? "); // nieznany typ
                 }
             }
-            System.out.println(); // nowa linia po każdym wierszu
+            System.out.println();
         }
     }
 }
