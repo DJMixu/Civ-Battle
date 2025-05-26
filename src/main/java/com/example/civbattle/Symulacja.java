@@ -13,12 +13,14 @@ public class Symulacja {
     public static Random ziarno;
     public static Plansza plansza;
     public static int iSymlacjaLicznikID;
+    public int licznikTur;
 
     //Domyślny start symulacji
     public Symulacja(int pX, int pY, int plCiv, String pSeed) {
         System.out.println(startSymulacji(pX, pY, plCiv, pSeed) == 0
                 ? "Symulacja wystartowała"
                 : "Symulacja nie wystartowała z błędem");
+        licznikTur = 0;
     }
 
     // Konstruktor z domyślnym seed
@@ -37,6 +39,7 @@ public class Symulacja {
     }
 
     public int krokSymulacji() {
+        licznikTur++;
         for (Cywilizacja civ : listaCywilizacji) {
             List<Jednostka> jednostkiKopia = new ArrayList<>(civ.jednostki);
             civ.wypiszDane();
@@ -44,7 +47,7 @@ public class Symulacja {
                 jednostka.ruch(this);
             }
         }
-        uzupelnijSurowce();
+        if(licznikTur>10 && licznikTur%2==0)uzupelnijSurowce();
         plansza.wypisz();
         System.out.println("KROK");
         return 1;
