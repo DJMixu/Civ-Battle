@@ -7,26 +7,23 @@ class Wojownik extends Jednostka {
     private final String logoPath = "images/wojownik.png";
     int atak;
 
-    public Wojownik(int id, int pX, int pY , int civ) {
+    public Wojownik(int id, int pX, int pY, int civ) {
         super(id, pX, pY);
         this.zycie = 30;
         this.atak = 5;
         this.idCywilizacji = civ;
     }
-    public Wojownik(int id, Point point , int civ) {
+
+    public Wojownik(int id, Point point, int civ) {
         super(id, point);
         this.zycie = 30;
         this.atak = 5;
         this.idCywilizacji = civ;
     }
 
-
-    void atak() {
-    }
-
     int smierc(Plansza plansza, Cywilizacja civ) {
         civ.licznikWojownikow--;
-        System.out.println(this.id + "wojownik usuniety");
+        //System.out.println(this.id + "wojownik usuniety");
         plansza.usunObiekt(pozycja);
         civ.jednostki.remove(this);
         return 2;
@@ -104,7 +101,7 @@ class Wojownik extends Jednostka {
             Obiekt o = plansza.zwrocPole(p.x, p.y);
             if (o instanceof Jednostka j && j.idCywilizacji != this.idCywilizacji) {
                 j.zycie -= this.atak;
-                System.out.println("Wojownik " + id + " zaatakował jednostkę " + j.id + " z cywilizacji " + j.idCywilizacji);
+                //System.out.println("Wojownik " + id + " zaatakował jednostkę " + j.id + " z cywilizacji " + j.idCywilizacji);
                 if (j.zycie <= 0) {
                     j.ruch(sim); // wywołuje śmierć
                 }

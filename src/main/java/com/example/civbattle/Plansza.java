@@ -17,6 +17,7 @@ public class Plansza {
     public Obiekt zwrocPole(int x, int y) {
         return plansza[x][y];
     }
+
     public List<Point> pustePola() {
         List<Point> lista = new ArrayList<>();
 
@@ -36,7 +37,7 @@ public class Plansza {
 
     public void dodajObiekt(Point pozycja, Obiekt obiekt) {
         plansza[pozycja.x][pozycja.y] = obiekt;
-        System.out.println("dodano" + plansza[pozycja.x][pozycja.y].toString());
+        //System.out.println("dodano" + plansza[pozycja.x][pozycja.y].toString());
     }
 
     public void dodajObiekty(List<Obiekt> lista) {
@@ -51,10 +52,11 @@ public class Plansza {
             plansza[obiekt.pozycja.x][obiekt.pozycja.y] = obiekt;
         }
     }
-    public void usunObiekt (Point punkt){
+
+    public void usunObiekt(Point punkt) {
         //System.out.println("USUWANIE");
         plansza[punkt.x][punkt.y] = null;
-      //  System.out.println("USUWANIE");
+        //  System.out.println("USUWANIE");
     }
 
     public void wypisz() {

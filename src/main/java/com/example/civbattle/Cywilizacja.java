@@ -8,7 +8,7 @@ class Cywilizacja {
     public int idCywilizacji;
     public String nameCywilizacji;
     public int[] surowce;
-    int licznikWojownikow , licznikOsadnikow , licznikOsad;
+    int licznikWojownikow, licznikOsadnikow, licznikOsad;
     List<Jednostka> jednostki;
     List<Osada> osady;
 
@@ -31,7 +31,8 @@ class Cywilizacja {
     void dodajJednostkę(Jednostka j) {
         jednostki.add(j);
     }
-    public void wypiszDane(){
+
+    public void wypiszDane() {
         System.out.println("///////////////////////");
         System.out.println("Nazwa" + nameCywilizacji);
         System.out.println("licznik wojownikow" + licznikWojownikow);

@@ -13,14 +13,16 @@ abstract class Jednostka extends Obiekt {
         super(id, pX, pY);
     }
 
-    public Jednostka(int id, Point pP , int pidCywilizacji) {
+    public Jednostka(int id, Point pP, int pidCywilizacji) {
         super(id, pP);
         this.idCywilizacji = pidCywilizacji;
     }
+
     public Jednostka(int id, Point pP) {
         super(id, pP);
 
     }
+
     public java.util.List<Point> getSasiedzi(Point p, int szerokosc, int wysokosc) {
         List<Point> wynik = new ArrayList<>();
         int[] dx = {-1, 0, 1};
