@@ -292,6 +292,9 @@ public class GridApplication extends Application {
 
     public static void main(String[] args) {
         System.out.println("start");
+        /*Symulacja sim = new Symulacja(70,20,5,"Ala ma kota");
+        for(int i = 0 ; i < 10 ; i++)
+            sim.krokSymulacji();*/
         launch();
     }
 }

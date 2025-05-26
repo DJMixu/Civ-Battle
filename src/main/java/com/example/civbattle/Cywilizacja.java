@@ -31,6 +31,19 @@ class Cywilizacja {
     void dodajJednostkę(Jednostka j) {
         jednostki.add(j);
     }
+    public void wypiszDane(){
+        System.out.println("///////////////////////");
+        System.out.println("Nazwa" + nameCywilizacji);
+        System.out.println("licznik wojownikow" + licznikWojownikow);
+        System.out.println("licznik osadnikow" + licznikOsadnikow);
+        System.out.println("licznik osad" + licznikOsad);
+        System.out.println("drewno" + surowce[0]);
+        System.out.println("metal" + surowce[1]);
+        System.out.println("kamien" + surowce[2]);
+        System.out.println("jednostki " + jednostki.toString());
+        System.out.println("osady " + osady.toString());
+        System.out.println("///////////////////////");
+    }
 
     @Override
     public String toString() {

@@ -21,7 +21,7 @@ class Osadnik extends Jednostka {
         Cywilizacja civ = sim.listaCywilizacji[this.idCywilizacji];
         if(!(this.zycie > 0))
             return smierc(sim.plansza,civ);
-        if (civ.surowce[0] >= 2000 && civ.surowce[1] >= 2000 && civ.surowce[2] >= 2000 && civ.licznikOsad < civ.licznikWojownikow) {
+        if (civ.surowce[0] >= 2000 && civ.surowce[1] >= 2000 && civ.surowce[2] >= 2000 && civ.licznikOsad <= civ.licznikWojownikow) {
             return zakladajOsadę(sim.plansza, civ);
         } else {
             dzialaj(sim.plansza, sim);
@@ -50,6 +50,7 @@ class Osadnik extends Jednostka {
         Osada os = new Osada(Symulacja.iSymlacjaLicznikID++, pozycja, civ.idCywilizacji);
         plansza.dodajObiekt(pozycja, os);
         civ.jednostki.add(os);
+        civ.licznikOsad++;
 
         return 2;
     }
@@ -58,6 +59,7 @@ class Osadnik extends Jednostka {
         civ.licznikOsadnikow--;
         System.out.println(this.id + "osadnik usuniety");
         plansza.usunObiekt(pozycja);
+        civ.jednostki.remove(this);
         return 2;
     }
 

@@ -1,6 +1,7 @@
 package com.example.civbattle;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Plansza {
@@ -15,6 +16,18 @@ public class Plansza {
 
     public Obiekt zwrocPole(int x, int y) {
         return plansza[x][y];
+    }
+    public List<Point> pustePola() {
+        List<Point> lista = new ArrayList<>();
+
+        for (int x = 0; x < plansza.length; x++) {
+            for (int y = 0; y < plansza[x].length; y++) {
+                if (plansza[x][y] == null) {
+                    lista.add(new Point(x, y));
+                }
+            }
+        }
+        return lista;
     }
 
     public Obiekt zwrocPole(Point pPozycja) {

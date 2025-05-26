@@ -36,21 +36,17 @@ public class Symulacja {
         this(20, 20, 3, "defaultSeed");
     }
 
-    public int krokSymulacji(){
-
-       for (Cywilizacja civ : listaCywilizacji) {
-           List<Jednostka> usun = new ArrayList<Jednostka>();
-            for (Jednostka jednostka : civ.jednostki) {
-                System.out.println("RUCH");
-                int wynik = jednostka.ruch(  this);
-                if(wynik==2 ){
-                   usun.add(jednostka);
-                }
+    public int krokSymulacji() {
+        for (Cywilizacja civ : listaCywilizacji) {
+            List<Jednostka> jednostkiKopia = new ArrayList<>(civ.jednostki);
+            civ.wypiszDane();
+            for (Jednostka jednostka : jednostkiKopia) {
+                jednostka.ruch(this);
             }
-           for (Jednostka jednostka1 : usun) {
-               civ.jednostki.remove(jednostka1);
-           }
-       }
+        }
+        uzupelnijSurowce();
+        plansza.wypisz();
+        System.out.println("KROK");
         return 1;
     }
 
@@ -66,7 +62,7 @@ public class Symulacja {
         iSymulacjaY = pY;
         iLiczbaCywilizacji = plCywilizacji;
         plansza = new Plansza(iSymulacjaX, iSymulacjaY);
-        listaCywilizacji = new Cywilizacja[(iLiczbaCywilizacji+1)];
+        listaCywilizacji = new Cywilizacja[(iLiczbaCywilizacji + 1)];
         generujStart();
         System.out.println("XXX");
         plansza.wypisz();
@@ -78,11 +74,25 @@ public class Symulacja {
         //System.out.println(plansza.zwrocPole(pozycja1));
         //System.out.println(obiektyWZasiegu(pozycja1,3));
         if (plansza.zwrocPole(pozycja1) == null) {
-            if (obiektyWZasiegu(pozycja1, 3 , plansza).isEmpty())
+            if (obiektyWZasiegu(pozycja1, 3, plansza).isEmpty())
                 return pozycja1;
         }
         //System.out.println("Pozycja zajeta dla jednostki");
         return generujPozycje();
+    }
+
+    public void uzupelnijSurowce() {
+        List<Point> pola = plansza.pustePola();
+        if (pola.size() > 10) {
+            int x = pola.size() / 10;
+            for(int i = 0 ; i < x ; i++){
+                int z = Symulacja.ziarno.nextInt(pola.size());
+                Surowiec sur = new Surowiec(iSymlacjaLicznikID++, pola.get(z), (ziarno.nextInt(15) + 5), ziarno.nextInt(3));
+                plansza.dodajObiekt(pola.get(z), sur);
+                pola.remove(z);
+            }
+
+        }
     }
 
     public Point generujPozycjeSurowca() {
@@ -99,11 +109,11 @@ public class Symulacja {
             listaCywilizacji[i] = new Cywilizacja(i);
             Point pozycja = generujPozycje();
             //System.out.println("Wygenerowane pozycje osadnik " + i);
-            listaCywilizacji[i].dodajJednostkę(new Osadnik(iSymlacjaLicznikID++, pozycja , i));
+            listaCywilizacji[i].dodajJednostkę(new Osadnik(iSymlacjaLicznikID++, pozycja, i));
             listaCywilizacji[i].licznikOsadnikow++;
-            listaCywilizacji[i].dodajJednostkę(new Wojownik(iSymlacjaLicznikID++, (pozycja.x < iSymulacjaX / 2 ? pozycja.x + 1 : pozycja.x - 1), pozycja.y , i ));
+            listaCywilizacji[i].dodajJednostkę(new Wojownik(iSymlacjaLicznikID++, (pozycja.x < iSymulacjaX / 2 ? pozycja.x + 1 : pozycja.x - 1), pozycja.y, i));
             listaCywilizacji[i].licznikWojownikow++;
-            listaCywilizacji[i].dodajJednostkę(new Wojownik(iSymlacjaLicznikID++, (pozycja.x), pozycja.y < iSymulacjaY / 2 ? pozycja.y + 1 : pozycja.y - 1 , i));
+            listaCywilizacji[i].dodajJednostkę(new Wojownik(iSymlacjaLicznikID++, (pozycja.x), pozycja.y < iSymulacjaY / 2 ? pozycja.y + 1 : pozycja.y - 1, i));
             listaCywilizacji[i].licznikWojownikow++;
             plansza.dodajJednostki(listaCywilizacji[i].jednostki);
         }
@@ -120,13 +130,13 @@ public class Symulacja {
             Point pozycja = generujPozycjeSurowca();
             Surowiec sur = new Surowiec(iSymlacjaLicznikID++, pozycja, (ziarno.nextInt(15) + 5), ziarno.nextInt(3));
             plansza.dodajObiekt(pozycja, sur);
-           // System.out.print(i + ";");
+            // System.out.print(i + ";");
         }
 
 
     }
 
-    public static List<Obiekt> obiektyWZasiegu(Point punkt, int zasieg , Plansza plansza) {
+    public static List<Obiekt> obiektyWZasiegu(Point punkt, int zasieg, Plansza plansza) {
         List<Obiekt> znalezione = new ArrayList<>();
         for (int dx = -zasieg; dx <= zasieg; dx++) {
             for (int dy = -zasieg; dy <= zasieg; dy++) {
