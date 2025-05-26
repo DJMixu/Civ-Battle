@@ -49,9 +49,9 @@ public class CivBattler extends Application {
         dialog.setResultConverter(button -> {
             if (button == okButtonType) {
                 try {
-                    int rows = rowsField.getText().isEmpty() ? 24 : Math.max(24, Integer.parseInt(rowsField.getText().trim())) ;
-                    int cols = colsField.getText().isEmpty() ? 24 : Math.max(24, Integer.parseInt(colsField.getText().trim()));
-                    int civs = civField.getText().isEmpty() ? 4 :  Math.min(8, Integer.parseInt(civField.getText().trim()));
+                    int rows = rowsField.getText().isEmpty() ? 24 : Math.min(24, Integer.parseInt(rowsField.getText().trim()));
+                    int cols = colsField.getText().isEmpty() ? 24 : Math.min(24, Integer.parseInt(colsField.getText().trim()));
+                    int civs = civField.getText().isEmpty() ? 4 : Math.max(8, Integer.parseInt(civField.getText().trim()));
 
                     return new int[]{rows, cols, civs};
                 } catch (NumberFormatException e) {
