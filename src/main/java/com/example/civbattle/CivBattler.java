@@ -355,6 +355,7 @@ public class CivBattler extends Application {
                     osadaLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
                     osadaLabel.setContentDisplay(ContentDisplay.LEFT);
                     osadaLabel.setTooltip(new Tooltip("Osady"));
+                    
 
                     jednostkiBox.getChildren().addAll(wojownikLabel, osadnikLabel, osadaLabel);
                 }
