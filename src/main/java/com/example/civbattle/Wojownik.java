@@ -3,10 +3,26 @@ package com.example.civbattle;
 import java.awt.*;
 import java.util.stream.Collectors;
 
+/**
+ * Klasa reprezentująca jednostkę wojownika w symulacji.
+ * Wojownik porusza się po planszy, atakuje wrogie jednostki w zasięgu oraz podejmuje decyzje strategiczne.
+ */
 class Wojownik extends Jednostka {
+
+    /** Ścieżka do ikony wojownika (może być użyta w GUI) */
     private final String logoPath = "images/wojownik.png";
+
+    /** Wartość ataku wojownika */
     int atak;
 
+    /**
+     * Konstruktor wojownika oparty na współrzędnych.
+     *
+     * @param id  unikalny identyfikator jednostki
+     * @param pX  pozycja X
+     * @param pY  pozycja Y
+     * @param civ ID cywilizacji, do której należy wojownik
+     */
     public Wojownik(int id, int pX, int pY, int civ) {
         super(id, pX, pY);
         this.zycie = 30;
@@ -14,6 +30,13 @@ class Wojownik extends Jednostka {
         this.idCywilizacji = civ;
     }
 
+    /**
+     * Konstruktor wojownika oparty na punkcie.
+     *
+     * @param id    unikalny identyfikator jednostki
+     * @param point punkt na planszy
+     * @param civ   ID cywilizacji, do której należy wojownik
+     */
     public Wojownik(int id, Point point, int civ) {
         super(id, point);
         this.zycie = 30;
@@ -21,14 +44,29 @@ class Wojownik extends Jednostka {
         this.idCywilizacji = civ;
     }
 
+    /**
+     * Usuwa wojownika z planszy i cywilizacji po jego śmierci.
+     *
+     * @param plansza plansza symulacji
+     * @param civ     cywilizacja, do której należy wojownik
+     * @return kod statusu 2 (śmierć)
+     */
     int smierc(Plansza plansza, Cywilizacja civ) {
         civ.licznikWojownikow--;
-        //System.out.println(this.id + "wojownik usuniety");
         plansza.usunObiekt(pozycja);
         civ.jednostki.remove(this);
         return 2;
     }
 
+    /**
+     * Główna logika ruchu jednostki w każdej turze.
+     * - Atakuje jeśli wróg obok
+     * - Zbliża się do najbliższego wroga
+     * - W przeciwnym razie porusza się losowo
+     *
+     * @param sim instancja symulacji
+     * @return kod statusu 1 (ruch wykonany)
+     */
     @Override
     public int ruch(Symulacja sim) {
         Cywilizacja civ = sim.listaCywilizacji[this.idCywilizacji];
@@ -37,20 +75,20 @@ class Wojownik extends Jednostka {
         int punkty = 3;
 
         while (punkty > 0) {
-            // 1. Szukaj wrogich jednostek w zasięgu 4
+            // 1. Szukaj wrogów w zasięgu 4 pól
             var wrogowie = Symulacja.obiektyWZasiegu(this.pozycja, 4, sim.plansza).stream()
                     .filter(o -> o instanceof Jednostka j && j.idCywilizacji != this.idCywilizacji)
                     .map(o -> (Jednostka) o)
                     .toList();
 
-            // 2. Jeśli wróg obok — atakuj
+            // 2. Atakuj jeśli wróg obok
             boolean zaatakowano = atakuj(sim.plansza, sim);
             if (zaatakowano) {
                 punkty--;
                 continue;
             }
 
-            // 3. Jeśli widzisz wroga — rusz się w jego stronę
+            // 3. Ruch w kierunku najbliższego wroga
             if (!wrogowie.isEmpty()) {
                 Jednostka cel = wrogowie.stream()
                         .min((a, b) -> Double.compare(a.pozycja.distance(this.pozycja), b.pozycja.distance(this.pozycja)))
@@ -76,7 +114,7 @@ class Wojownik extends Jednostka {
                 }
             }
 
-            // 4. Brak wroga lub możliwości ruchu w jego stronę — ruch losowy
+            // 4. Ruch losowy
             var sasiedzi = getSasiedzi(this.pozycja, sim.plansza.x, sim.plansza.y).stream()
                     .filter(p -> sim.plansza.zwrocPole(p.x, p.y) == null)
                     .collect(Collectors.toList());
@@ -96,12 +134,18 @@ class Wojownik extends Jednostka {
         return 1;
     }
 
+    /**
+     * Próbuje zaatakować wrogą jednostkę w sąsiednich polach.
+     *
+     * @param plansza plansza symulacji
+     * @param sim     instancja symulacji
+     * @return true jeśli udało się zaatakować, false w przeciwnym razie
+     */
     private boolean atakuj(Plansza plansza, Symulacja sim) {
         for (Point p : getSasiedzi(this.pozycja, sim.plansza.x, sim.plansza.y)) {
             Obiekt o = plansza.zwrocPole(p.x, p.y);
             if (o instanceof Jednostka j && j.idCywilizacji != this.idCywilizacji) {
                 j.zycie -= this.atak;
-                //System.out.println("Wojownik " + id + " zaatakował jednostkę " + j.id + " z cywilizacji " + j.idCywilizacji);
                 if (j.zycie <= 0) {
                     j.ruch(sim); // wywołuje śmierć
                 }
@@ -110,6 +154,4 @@ class Wojownik extends Jednostka {
         }
         return false;
     }
-
-
 }

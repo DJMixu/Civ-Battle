@@ -3,22 +3,49 @@ package com.example.civbattle;
 import java.awt.*;
 import java.util.stream.Collectors;
 
+/**
+ * Klasa reprezentująca barbarzyńcę – wrogą jednostkę niezależną, należącą do ostatniej cywilizacji (o ID 9).
+ * Barbarzyńcy atakują inne jednostki, poruszają się losowo lub w stronę przeciwników.
+ */
 class Barbarzynca extends Jednostka {
+    /** Ścieżka do obrazka barbarzyńcy. */
     private final String logoPath = "images/barbarzynca.png";
+
+    /** Wartość ataku barbarzyńcy. */
     private int atak;
 
+    /**
+     * Konstruktor barbarzyńcy z pozycją jako współrzędne.
+     *
+     * @param id identyfikator jednostki
+     * @param pX współrzędna X
+     * @param pY współrzędna Y
+     */
     public Barbarzynca(int id, int pX, int pY) {
         super(id, pX, pY);
     }
 
+    /**
+     * Konstruktor barbarzyńcy z pozycją jako punkt.
+     *
+     * @param id identyfikator jednostki
+     * @param pPozycja punkt określający pozycję
+     */
     public Barbarzynca(int id, Point pPozycja) {
         super(id, pPozycja);
-        pozycja = pPozycja;
+        this.pozycja = pPozycja;
         this.idCywilizacji = 9;
         this.zycie = 20;
         this.atak = 8;
     }
 
+    /**
+     * Usuwa barbarzyńcę z planszy i listy jednostek cywilizacji barbarzyńców.
+     *
+     * @param plansza plansza gry
+     * @param civ cywilizacja barbarzyńców
+     * @return kod 2 oznaczający śmierć
+     */
     int smierc(Plansza plansza, Cywilizacja civ) {
         civ.licznikWojownikow--;
         plansza.usunObiekt(pozycja);
@@ -26,6 +53,15 @@ class Barbarzynca extends Jednostka {
         return 2;
     }
 
+    /**
+     * Logika ruchu barbarzyńcy w trakcie jednej tury:
+     * - Atakuje wrogie jednostki w zasięgu 1
+     * - Zbliża się do widocznych wrogów w zasięgu 4
+     * - Porusza się losowo, jeśli nie widzi wroga
+     *
+     * @param sim obiekt symulacji
+     * @return 1 jeżeli jednostka wykonała akcje, 2 jeżeli zginęła
+     */
     @Override
     public int ruch(Symulacja sim) {
         Cywilizacja civ = sim.listaCywilizacji[sim.listaCywilizacji.length - 1];
@@ -34,20 +70,20 @@ class Barbarzynca extends Jednostka {
         int punkty = 3;
 
         while (punkty > 0) {
-            // 1. Szukaj wrogich jednostek w zasięgu 4
+            // Szukanie wrogów w zasięgu
             var wrogowie = Symulacja.obiektyWZasiegu(this.pozycja, 4, sim.plansza).stream()
                     .filter(o -> o instanceof Jednostka j && j.idCywilizacji != this.idCywilizacji)
                     .map(o -> (Jednostka) o)
                     .toList();
 
-            // 2. Jeśli wróg obok — atakuj
+            // Atak, jeśli wróg obok
             boolean zaatakowano = atakuj(sim.plansza, sim);
             if (zaatakowano) {
                 punkty--;
                 continue;
             }
 
-            // 3. Jeśli widzisz wroga — rusz się w jego stronę
+            // Ruch w kierunku wroga
             if (!wrogowie.isEmpty()) {
                 Jednostka cel = wrogowie.stream()
                         .min((a, b) -> Double.compare(a.pozycja.distance(this.pozycja), b.pozycja.distance(this.pozycja)))
@@ -73,7 +109,7 @@ class Barbarzynca extends Jednostka {
                 }
             }
 
-            // 4. Brak wroga lub możliwości ruchu w jego stronę — ruch losowy
+            // Ruch losowy
             var sasiedzi = getSasiedzi(this.pozycja, sim.plansza.x, sim.plansza.y).stream()
                     .filter(p -> sim.plansza.zwrocPole(p.x, p.y) == null)
                     .collect(Collectors.toList());
@@ -93,6 +129,13 @@ class Barbarzynca extends Jednostka {
         return 1;
     }
 
+    /**
+     * Próbuje zaatakować jednostkę w sąsiednich polach.
+     *
+     * @param plansza plansza gry
+     * @param sim obiekt symulacji
+     * @return true jeśli zaatakowano wroga, false w przeciwnym razie
+     */
     private boolean atakuj(Plansza plansza, Symulacja sim) {
         for (Point p : getSasiedzi(this.pozycja, sim.plansza.x, sim.plansza.y)) {
             Obiekt o = plansza.zwrocPole(p.x, p.y);
