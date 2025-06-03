@@ -161,11 +161,12 @@ public class CivBattler extends Application {
         stage.setTitle("Civilization Battle Simulator");
         stage.setScene(scene);
         stage.show();
-        /**Zapis obecnych statystyk symulacji do pliku.
-         * @param symulacja Obiekt symulacji, którego statystyki mają zostać zapisane.
-         *
-         */
     }
+
+    /**Zapis obecnych statystyk symulacji do pliku.
+     * @param symulacja Obiekt symulacji, którego statystyki mają zostać zapisane.
+     *
+     */
     public void saveSimulationToFile(Symulacja symulacja) {
         String fileName = "symulacja.txt";
         try (FileWriter writer = new FileWriter(fileName)) {
