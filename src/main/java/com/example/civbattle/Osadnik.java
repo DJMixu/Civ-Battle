@@ -39,10 +39,12 @@ class Osadnik extends Jednostka {
     @Override
     public int ruch(Symulacja sim) {
         Cywilizacja civ = sim.listaCywilizacji[this.idCywilizacji];
-
+        
+        // Jeśli osadnik nie żyje – usuń go z planszy
         if (!(this.zycie > 0))
             return smierc(sim.plansza, civ);
 
+        // Zakładanie osady, jeśli spełnione warunki ekonomiczne i balans jednostek
         if (civ.surowce[0] >= 2000 && civ.surowce[1] >= 2000 && civ.surowce[2] >= 2000 &&
                 civ.licznikOsad <= civ.licznikWojownikow) {
             return zakladajOsadę(sim.plansza, civ);

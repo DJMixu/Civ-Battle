@@ -63,7 +63,7 @@ abstract class Jednostka extends Obiekt {
      * @param p          punkt odniesienia
      * @param szerokosc  szerokość planszy
      * @param wysokosc   wysokość planszy
-     * @return lista sąsiadujących punktów (maksymalnie 8)
+     * @return lista sąsiadujących punktów z punktem {@code p}
      */
     public List<Point> getSasiedzi(Point p, int szerokosc, int wysokosc) {
         List<Point> wynik = new ArrayList<>();
