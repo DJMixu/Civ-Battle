@@ -14,6 +14,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.io.FileWriter;
 
 public class CivBattler extends Application {
 
@@ -26,7 +27,7 @@ public class CivBattler extends Application {
         // okno dialogowe
         Dialog<int[]> dialog = new Dialog<>();
         dialog.setTitle("Stwórz Siatkę");
-        dialog.setHeaderText("Podaj parametry symulacji:\nPozostaw puste, aby użyć domyślnych 20x20 - 3 cywilizacje.");
+        dialog.setHeaderText("Podaj parametry symulacji:\nPozostaw puste, aby użyć domyślnych 24x24 - 4 cywilizacje.");
 
         TextField rowsField = new TextField();
         rowsField.setPromptText("Wiersze");
@@ -52,9 +53,9 @@ public class CivBattler extends Application {
         dialog.setResultConverter(button -> {
             if (button == okButtonType) {
                 try {
-                    int rows = rowsField.getText().isEmpty() ? 24 : Math.max(24,Integer.parseInt(rowsField.getText().trim())) ;
-                    int cols = colsField.getText().isEmpty() ? 24 : Math.max(24,Integer.parseInt(colsField.getText().trim()));
-                    int civs = civField.getText().isEmpty() ? 4 : Math.min(8,Integer.parseInt(civField.getText().trim()));
+                    int rows = rowsField.getText().isEmpty() ? 24 : Math.max(24, Integer.parseInt(rowsField.getText().trim()));
+                    int cols = colsField.getText().isEmpty() ? 24 : Math.max(24, Integer.parseInt(colsField.getText().trim()));
+                    int civs = civField.getText().isEmpty() ? 4 : Math.min(8, Integer.parseInt(civField.getText().trim()));
                     int seed = seedField.getText().isEmpty() ? -1 : Integer.parseInt(seedField.getText().trim());
 
                     return new int[]{rows, cols, civs, seed};
@@ -95,6 +96,7 @@ public class CivBattler extends Application {
                 toggleButton.setText("⏸ Stop");
             }
         });
+        // pasek narzędzi - przycisk start/stop - przycisk zapisu
 
         HBox topBar = new HBox(toggleButton);
         topBar.setAlignment(Pos.TOP_RIGHT);
@@ -131,12 +133,47 @@ public class CivBattler extends Application {
         simulationTimeline.setCycleCount(Timeline.INDEFINITE);
         simulationTimeline.play();
 
+
+        //zapis symulacji
+        Button saveButton = new Button("💾 Zapisz");
+        saveButton.setStyle("-fx-font-size: 16px; -fx-padding: 8 16 8 16;");
+        toggleButton.setAlignment(Pos.CENTER_RIGHT);
+        saveButton.setOnAction(e -> {
+            saveSimulationToFile(initialSimulation);
+        });
+        HBox savebar = new HBox(saveButton);
+        savebar.setAlignment(Pos.TOP_RIGHT);
+        savebar.setStyle("-fx-padding: 10 0 0 10;");
+        root.setTop(new HBox(topBar, savebar));
         root.setRight(statsPanel);
 
         Scene scene = new Scene(root, 1920, 1080);
         stage.setTitle("Civilization Battle Simulator");
         stage.setScene(scene);
         stage.show();
+    }
+    public void saveSimulationToFile(Symulacja symulacja) {
+        String fileName = "symulacja.txt";
+        try (FileWriter writer = new FileWriter(fileName)) {
+            writer.write("Symulacja Cywilizacji - Ilość tur - " + symulacja.licznikTur + "\n");
+            writer.write("Liczba cywilizacji: " + symulacja.listaCywilizacji.length + "\n");
+            writer.write("\n");
+            for (Cywilizacja civ : symulacja.listaCywilizacji) {
+                if (civ != null) {
+                    writer.write("Cywilizacja: " + civ.nameCywilizacji + "\n");
+                    writer.write("Liczba wojowników: " + civ.licznikWojownikow + "\n");
+                    writer.write("Liczba osadników: " + civ.licznikOsadnikow + "\n");
+                    writer.write("Liczba osad: " + civ.licznikOsad + "\n");
+                    writer.write("Kamień: " + civ.surowce[0] + "\n");
+                    writer.write("Drewno: " + civ.surowce[1] + "\n");
+                    writer.write("ETCS: " + civ.surowce[2] + "\n");
+                    writer.write("\n");
+                }
+            }
+            System.out.println("Symulacja zapisana do pliku: " + fileName);
+        } catch (Exception e) {
+            System.err.println("Błąd podczas zapisywania symulacji do pliku: " + e.getMessage());
+        }
     }
 
     @Override
@@ -145,6 +182,7 @@ public class CivBattler extends Application {
             simulationTimeline.stop();
         }
     }
+
     //kolory cywilizacji
     private String getCivilizationColor(int civId) {
         return switch (civId) {
@@ -281,7 +319,7 @@ public class CivBattler extends Application {
                 surowceBox.setAlignment(Pos.CENTER_LEFT);
 
                 String[] imgPaths = {"/images/stone.png", "/images/drzewo.png", "/images/ETCS.png"};
-                String[] tooltips = {"Kamień", "Drewno", "Złoto"};
+
 
                 for (int i = 0; i < civ.surowce.length && i < imgPaths.length; i++) {
                     ImageView icon = new ImageView();
@@ -294,7 +332,6 @@ public class CivBattler extends Application {
                     Label label = new Label(String.valueOf(civ.surowce[i]), icon);
                     label.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
                     label.setContentDisplay(ContentDisplay.LEFT);
-                    label.setTooltip(new Tooltip(tooltips[i]));
                     surowceBox.getChildren().add(label);
                 }
 
@@ -314,7 +351,7 @@ public class CivBattler extends Application {
                     Label barbarzyncaLabel = new Label(String.valueOf(civ.licznikWojownikow), barbarzyncaIcon);
                     barbarzyncaLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
                     barbarzyncaLabel.setContentDisplay(ContentDisplay.LEFT);
-                    barbarzyncaLabel.setTooltip(new Tooltip("Barbarzyńcy"));
+
                     jednostkiBox.getChildren().add(barbarzyncaLabel);
                 } else {
                     // Wojownicy
@@ -328,7 +365,7 @@ public class CivBattler extends Application {
                     Label wojownikLabel = new Label(String.valueOf(civ.licznikWojownikow), wojownikIcon);
                     wojownikLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
                     wojownikLabel.setContentDisplay(ContentDisplay.LEFT);
-                    wojownikLabel.setTooltip(new Tooltip("Wojownicy"));
+
 
                     // Osadnicy
                     ImageView osadnikIcon = new ImageView();
@@ -341,7 +378,7 @@ public class CivBattler extends Application {
                     Label osadnikLabel = new Label(String.valueOf(civ.licznikOsadnikow), osadnikIcon);
                     osadnikLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
                     osadnikLabel.setContentDisplay(ContentDisplay.LEFT);
-                    osadnikLabel.setTooltip(new Tooltip("Osadnicy"));
+
 
                     // Osady
                     ImageView osadaIcon = new ImageView();
@@ -354,9 +391,6 @@ public class CivBattler extends Application {
                     Label osadaLabel = new Label(String.valueOf(civ.licznikOsad), osadaIcon);
                     osadaLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
                     osadaLabel.setContentDisplay(ContentDisplay.LEFT);
-                    osadaLabel.setTooltip(new Tooltip("Osady"));
-                    
-
                     jednostkiBox.getChildren().addAll(wojownikLabel, osadnikLabel, osadaLabel);
                 }
 
