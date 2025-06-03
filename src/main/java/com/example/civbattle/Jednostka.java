@@ -6,36 +6,39 @@ import java.util.List;
 
 /**
  * Abstrakcyjna klasa reprezentująca jednostkę w grze.
- * Dziedziczy po klasie Obiekt i dodaje logikę cywilizacyjną oraz zachowania jednostek.
- * Może być rozszerzana przez konkretne typy jednostek, takie jak Osadnik, Wojownik itp.
+ * Dziedziczy po klasie {@link Obiekt} i dodaje właściwości oraz metody
+ * charakterystyczne dla jednostek należących do cywilizacji.
+ * <p>
+ * Przykładowe implementacje: {@link Osadnik}, {@link Wojownik}.
  */
 abstract class Jednostka extends Obiekt {
-    /** Ilość punktów życia jednostki. */
+
+    /** Liczba punktów życia jednostki. Po osiągnięciu 0 jednostka ginie. */
     int zycie;
 
     /** Identyfikator cywilizacji, do której należy jednostka. */
     int idCywilizacji;
 
-    /** Poprzednia pozycja jednostki na planszy. */
+    /** Poprzednia pozycja jednostki na planszy (przydatna przy planowaniu ruchu). */
     public Point poprzedniaPozycja;
 
     /**
-     * Konstruktor jednostki na podstawie współrzędnych X i Y.
+     * Konstruktor tworzący jednostkę na podstawie współrzędnych X i Y.
      *
-     * @param id identyfikator jednostki
-     * @param pX współrzędna X
-     * @param pY współrzędna Y
+     * @param id  identyfikator jednostki
+     * @param pX  współrzędna X pozycji startowej
+     * @param pY  współrzędna Y pozycji startowej
      */
     public Jednostka(int id, int pX, int pY) {
         super(id, pX, pY);
     }
 
     /**
-     * Konstruktor jednostki na podstawie punktu i identyfikatora cywilizacji.
+     * Konstruktor tworzący jednostkę na podstawie punktu oraz ID cywilizacji.
      *
-     * @param id identyfikator jednostki
-     * @param pP pozycja jednostki
-     * @param pidCywilizacji identyfikator cywilizacji
+     * @param id              identyfikator jednostki
+     * @param pP              pozycja jednostki
+     * @param pidCywilizacji  identyfikator cywilizacji
      */
     public Jednostka(int id, Point pP, int pidCywilizacji) {
         super(id, pP);
@@ -43,22 +46,24 @@ abstract class Jednostka extends Obiekt {
     }
 
     /**
-     * Konstruktor jednostki na podstawie punktu (bez przypisania do cywilizacji).
+     * Konstruktor tworzący jednostkę na podstawie punktu.
+     * Cywilizacja nie jest przypisana przy tworzeniu.
      *
-     * @param id identyfikator jednostki
-     * @param pP pozycja jednostki
+     * @param id  identyfikator jednostki
+     * @param pP  pozycja jednostki
      */
     public Jednostka(int id, Point pP) {
         super(id, pP);
     }
 
     /**
-     * Zwraca listę sąsiadujących pól wokół danej pozycji na planszy.
+     * Zwraca listę sąsiadujących pól wokół danej pozycji,
+     * uwzględniając granice planszy.
      *
      * @param p          punkt odniesienia
      * @param szerokosc  szerokość planszy
      * @param wysokosc   wysokość planszy
-     * @return lista punktów sąsiadujących z punktem {@code p}
+     * @return lista sąsiadujących punktów (maksymalnie 8)
      */
     public List<Point> getSasiedzi(Point p, int szerokosc, int wysokosc) {
         List<Point> wynik = new ArrayList<>();
@@ -82,10 +87,16 @@ abstract class Jednostka extends Obiekt {
     }
 
     /**
-     * Metoda abstrakcyjna wykonująca ruch jednostki w danej turze symulacji.
+     * Abstrakcyjna metoda odpowiedzialna za działanie jednostki w jednej turze.
+     * Powinna być zaimplementowana w klasach dziedziczących.
      *
      * @param sim aktualna instancja symulacji
-     * @return kod zwrotny oznaczający wynik ruchu
+     * @return kod zwrotny:
+     *         <ul>
+     *             <li><b>0</b> – brak akcji</li>
+     *             <li><b>1</b> – ruch jednostki</li>
+     *             <li><b>2</b> – śmierć jednostki</li>
+     *         </ul>
      */
     public abstract int ruch(Symulacja sim);
 }

@@ -8,28 +8,29 @@ import java.util.stream.Collectors;
  * Barbarzyńcy atakują inne jednostki, poruszają się losowo lub w stronę przeciwników.
  */
 class Barbarzynca extends Jednostka {
-    /** Ścieżka do ikony  */
+
+    /** Ścieżka do ikony barbarzyńcy. */
     private final String logoPath = "images/barbarzynca.png";
 
     /** Wartość ataku barbarzyńcy. */
     private int atak;
 
     /**
-     * Konstruktor barbarzyńcy z pozycją jako współrzędne.
+     * Tworzy barbarzyńcę na podstawie współrzędnych X i Y.
      *
      * @param id identyfikator jednostki
-     * @param pX współrzędna X
-     * @param pY współrzędna Y
+     * @param pX współrzędna X na planszy
+     * @param pY współrzędna Y na planszy
      */
     public Barbarzynca(int id, int pX, int pY) {
         super(id, pX, pY);
     }
 
     /**
-     * Konstruktor barbarzyńcy z pozycją jako punkt.
+     * Tworzy barbarzyńcę na podstawie punktu na planszy.
      *
      * @param id identyfikator jednostki
-     * @param pPozycja punkt określający pozycję
+     * @param pPozycja punkt określający pozycję (X, Y)
      */
     public Barbarzynca(int id, Point pPozycja) {
         super(id, pPozycja);
@@ -40,7 +41,7 @@ class Barbarzynca extends Jednostka {
     }
 
     /**
-     * Usuwa barbarzyńcę z planszy i z listy jednostek cywilizacji barbarzyńców.
+     * Obsługuje śmierć barbarzyńcy — usuwa jednostkę z planszy i listy jednostek cywilizacji barbarzyńców.
      *
      * @param plansza plansza gry
      * @param civ cywilizacja barbarzyńców
@@ -54,13 +55,15 @@ class Barbarzynca extends Jednostka {
     }
 
     /**
-     * Logika ruchu barbarzyńcy w trakcie jednej tury:
-     * - Atakuje wrogie jednostki w zasięgu 1
-     * - Zbliża się do widocznych wrogów w zasięgu 4
-     * - Porusza się losowo, jeśli nie widzi wroga
+     * Główna logika tury barbarzyńcy:
+     * <ul>
+     *   <li>Atakuje wroga, jeśli znajduje się w sąsiedztwie</li>
+     *   <li>Zbliża się do najbliższej jednostki przeciwnika w zasięgu 4</li>
+     *   <li>W przeciwnym wypadku porusza się losowo</li>
+     * </ul>
      *
-     * @param sim obiekt symulacji
-     * @return 1 jeżeli jednostka wykonała akcje, 2 jeżeli zginęła
+     * @param sim instancja symulacji
+     * @return 1 jeśli wykonano akcję, 2 jeśli jednostka zginęła
      */
     @Override
     public int ruch(Symulacja sim) {
@@ -70,20 +73,16 @@ class Barbarzynca extends Jednostka {
         int punkty = 3;
 
         while (punkty > 0) {
-            // Szukanie wrogów w zasięgu
             var wrogowie = Symulacja.obiektyWZasiegu(this.pozycja, 4, sim.plansza).stream()
                     .filter(o -> o instanceof Jednostka j && j.idCywilizacji != this.idCywilizacji)
                     .map(o -> (Jednostka) o)
                     .toList();
 
-            // Atak, jeśli wróg obok
-            boolean zaatakowano = atakuj(sim.plansza, sim);
-            if (zaatakowano) {
+            if (atakuj(sim.plansza, sim)) {
                 punkty--;
                 continue;
             }
 
-            // Ruch w kierunku wroga
             if (!wrogowie.isEmpty()) {
                 Jednostka cel = wrogowie.stream()
                         .min((a, b) -> Double.compare(a.pozycja.distance(this.pozycja), b.pozycja.distance(this.pozycja)))
@@ -109,7 +108,6 @@ class Barbarzynca extends Jednostka {
                 }
             }
 
-            // Ruch losowy
             var sasiedzi = getSasiedzi(this.pozycja, sim.plansza.x, sim.plansza.y).stream()
                     .filter(p -> sim.plansza.zwrocPole(p.x, p.y) == null)
                     .collect(Collectors.toList());
@@ -130,11 +128,11 @@ class Barbarzynca extends Jednostka {
     }
 
     /**
-     * Próbuje zaatakować jednostkę w sąsiednich polach.
+     * Przeszukuje sąsiednie pola i atakuje pierwszą napotkaną wrogą jednostkę.
      *
      * @param plansza plansza gry
-     * @param sim obiekt symulacji
-     * @return true jeśli zaatakowano wroga, false w przeciwnym razie
+     * @param sim instancja symulacji
+     * @return true jeśli przeprowadzono atak, false w przeciwnym razie
      */
     private boolean atakuj(Plansza plansza, Symulacja sim) {
         for (Point p : getSasiedzi(this.pozycja, sim.plansza.x, sim.plansza.y)) {
@@ -142,7 +140,7 @@ class Barbarzynca extends Jednostka {
             if (o instanceof Jednostka j && j.idCywilizacji != this.idCywilizacji) {
                 j.zycie -= this.atak;
                 if (j.zycie <= 0) {
-                    j.ruch(sim); // wywołuje śmierć
+                    j.ruch(sim); // wywołuje śmierć jednostki
                 }
                 return true;
             }

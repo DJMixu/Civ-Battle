@@ -5,23 +5,25 @@ import java.util.stream.Collectors;
 
 /**
  * Klasa reprezentująca jednostkę wojownika w symulacji.
- * Wojownik porusza się po planszy, atakuje wrogie jednostki w zasięgu oraz podejmuje decyzje strategiczne.
+ * <p>
+ * Wojownik porusza się po planszy, atakuje wrogów w sąsiedztwie oraz dąży do najbliższych przeciwników.
+ * Jeśli nie ma celu, porusza się losowo. W przypadku śmierci zostaje usunięty z gry.
  */
 class Wojownik extends Jednostka {
 
-    /** Ścieżka do ikony  */
+    /** Ścieżka do ikony reprezentującej wojownika. */
     private final String logoPath = "images/wojownik.png";
 
-    /** Wartość ataku wojownika */
+    /** Wartość ataku wojownika. */
     int atak;
 
     /**
-     * Konstruktor wojownika oparty na współrzędnych.
+     * Tworzy nowego wojownika na podstawie współrzędnych X i Y.
      *
      * @param id  unikalny identyfikator jednostki
-     * @param pX  pozycja X
-     * @param pY  pozycja Y
-     * @param civ ID cywilizacji, do której należy wojownik
+     * @param pX  współrzędna X
+     * @param pY  współrzędna Y
+     * @param civ identyfikator cywilizacji, do której należy wojownik
      */
     public Wojownik(int id, int pX, int pY, int civ) {
         super(id, pX, pY);
@@ -31,11 +33,11 @@ class Wojownik extends Jednostka {
     }
 
     /**
-     * Konstruktor wojownika oparty na punkcie.
+     * Tworzy nowego wojownika na podstawie punktu.
      *
      * @param id    unikalny identyfikator jednostki
-     * @param point punkt na planszy
-     * @param civ   ID cywilizacji, do której należy wojownik
+     * @param point pozycja wojownika na planszy
+     * @param civ   identyfikator cywilizacji, do której należy wojownik
      */
     public Wojownik(int id, Point point, int civ) {
         super(id, point);
@@ -45,11 +47,11 @@ class Wojownik extends Jednostka {
     }
 
     /**
-     * Usuwa wojownika z planszy i cywilizacji po jego śmierci.
+     * Obsługuje śmierć wojownika — usuwa go z planszy i z listy jednostek cywilizacji.
      *
-     * @param plansza plansza symulacji
-     * @param civ     cywilizacja, do której należy wojownik
-     * @return kod statusu 2 (śmierć)
+     * @param plansza plansza, z której należy usunąć jednostkę
+     * @param civ     cywilizacja, z której należy usunąć jednostkę
+     * @return kod 2 informujący o śmierci jednostki
      */
     int smierc(Plansza plansza, Cywilizacja civ) {
         civ.licznikWojownikow--;
@@ -59,20 +61,22 @@ class Wojownik extends Jednostka {
     }
 
     /**
-     * Główna logika ruchu jednostki w każdej turze.
-     * - Atakuje jeśli wróg obok
-     * - Zbliża się do najbliższego wroga
-     * - W przeciwnym razie porusza się losowo
+     * Logika ruchu wojownika podczas tury symulacji:
+     * <ul>
+     *     <li>Jeśli wróg znajduje się w sąsiedztwie — atakuje.</li>
+     *     <li>W przeciwnym razie zbliża się do najbliższego przeciwnika w zasięgu.</li>
+     *     <li>Jeśli nie ma celu — porusza się losowo.</li>
+     * </ul>
      *
-     * @param sim instancja symulacji
-     * @return kod statusu 1 (ruch wykonany)
+     * @param sim instancja symulacji zawierająca planszę i wszystkie cywilizacje
+     * @return kod 1 oznaczający wykonanie ruchu, lub kod 2, jeśli jednostka zginęła
      */
     @Override
     public int ruch(Symulacja sim) {
         Cywilizacja civ = sim.listaCywilizacji[this.idCywilizacji];
         if (this.zycie <= 0) return smierc(sim.plansza, civ);
 
-        int punkty = 3;
+        int punkty = 3;  // liczba możliwych ruchów
 
         while (punkty > 0) {
             // 1. Szukaj wrogów w zasięgu 4 pól
@@ -88,7 +92,7 @@ class Wojownik extends Jednostka {
                 continue;
             }
 
-            // 3. Ruch w kierunku najbliższego wroga
+            // 3. Porusz się w stronę najbliższego wroga
             if (!wrogowie.isEmpty()) {
                 Jednostka cel = wrogowie.stream()
                         .min((a, b) -> Double.compare(a.pozycja.distance(this.pozycja), b.pozycja.distance(this.pozycja)))
@@ -114,7 +118,7 @@ class Wojownik extends Jednostka {
                 }
             }
 
-            // 4. Ruch losowy
+            // 4. Ruch losowy, jeśli nie ma celu
             var sasiedzi = getSasiedzi(this.pozycja, sim.plansza.x, sim.plansza.y).stream()
                     .filter(p -> sim.plansza.zwrocPole(p.x, p.y) == null)
                     .collect(Collectors.toList());
@@ -135,7 +139,7 @@ class Wojownik extends Jednostka {
     }
 
     /**
-     * Próbuje zaatakować wrogą jednostkę w sąsiednich polach.
+     * Próbuje zaatakować wroga na sąsiednim polu.
      *
      * @param plansza plansza symulacji
      * @param sim     instancja symulacji
@@ -147,7 +151,7 @@ class Wojownik extends Jednostka {
             if (o instanceof Jednostka j && j.idCywilizacji != this.idCywilizacji) {
                 j.zycie -= this.atak;
                 if (j.zycie <= 0) {
-                    j.ruch(sim); // wywołuje śmierć
+                    j.ruch(sim); // wywołuje logikę śmierci jednostki
                 }
                 return true;
             }
