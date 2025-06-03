@@ -9,6 +9,7 @@ import java.util.List;
  * regeneruje swoje życie oraz znika z planszy po śmierci.
  */
 public class Osada extends Jednostka {
+    /** Ścieżka do ikony  */
     private final String logoPath = "images/osada.png";
 
     /**

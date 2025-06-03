@@ -74,8 +74,8 @@ class Cywilizacja {
         System.out.println("Drewno: " + surowce[0]);
         System.out.println("Metal: " + surowce[1]);
         System.out.println("Kamień: " + surowce[2]);
-        System.out.println("Jednostki: " + jednostki);
-        System.out.println("Osady: " + osady);
+        System.out.println("Jednostki: " + jednostki.toString());
+        System.out.println("Osady: " + osady.toString());
         System.out.println("///////////////////////");
     }
 

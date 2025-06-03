@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 // Klasa reprezentująca jednostkę Osadnik – odpowiedzialną za zakładanie osad i zbieranie surowców
 class Osadnik extends Jednostka {
+    /** Ścieżka do ikony  */
     private final String logoPath = "images/osadnik.png";
 
     // Konstruktor ustawiający ID, pozycję i przynależność cywilizacyjną osadnika
@@ -66,7 +67,7 @@ class Osadnik extends Jednostka {
         return 2;
     }
 
-    // Próba ucieczki osadnika od jednostek zagrażających
+    // Próba ucieczki osadnika od zagrożenia
     public boolean uciekaj(Plansza plansza, Symulacja sim, List<Jednostka> zagrozenie) {
         // Oblicz środek zagrożenia
         double srodekX = 0, srodekY = 0;

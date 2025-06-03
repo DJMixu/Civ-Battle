@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
  */
 class Wojownik extends Jednostka {
 
-    /** Ścieżka do ikony wojownika (może być użyta w GUI) */
+    /** Ścieżka do ikony  */
     private final String logoPath = "images/wojownik.png";
 
     /** Wartość ataku wojownika */

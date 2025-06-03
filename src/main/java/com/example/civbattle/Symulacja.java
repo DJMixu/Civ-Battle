@@ -78,7 +78,7 @@ public class Symulacja {
      * - wykonuje ruchy wszystkich jednostek
      * - okresowo uzupełnia surowce
      *
-     * @return zawsze 1 (można rozbudować o inne stany)
+     * @return zawsze 1
      */
     public int krokSymulacji() {
         licznikTur++;

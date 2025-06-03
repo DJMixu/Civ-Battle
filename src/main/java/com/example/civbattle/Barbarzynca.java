@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
  * Barbarzyńcy atakują inne jednostki, poruszają się losowo lub w stronę przeciwników.
  */
 class Barbarzynca extends Jednostka {
-    /** Ścieżka do obrazka barbarzyńcy. */
+    /** Ścieżka do ikony  */
     private final String logoPath = "images/barbarzynca.png";
 
     /** Wartość ataku barbarzyńcy. */
@@ -40,7 +40,7 @@ class Barbarzynca extends Jednostka {
     }
 
     /**
-     * Usuwa barbarzyńcę z planszy i listy jednostek cywilizacji barbarzyńców.
+     * Usuwa barbarzyńcę z planszy i z listy jednostek cywilizacji barbarzyńców.
      *
      * @param plansza plansza gry
      * @param civ cywilizacja barbarzyńców

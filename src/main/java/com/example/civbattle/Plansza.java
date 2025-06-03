@@ -31,7 +31,7 @@ public class Plansza {
     }
 
     /**
-     * Zwraca obiekt znajdujący się na zadanym polu planszy.
+     * Zwraca obiekt znajdujący się na danym polu planszy.
      * @param x współrzędna X pola
      * @param y współrzędna Y pola
      * @return obiekt na polu lub null, jeśli pole jest puste
