@@ -15,12 +15,22 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.FileWriter;
+/**
+ * Główna klasa aplikacji CivBattler.
+ * Odpowiada za inicjalizację GUI, obsługę parametrów wejściowych i sterowanie symulacją.
+ */
 
 public class CivBattler extends Application {
 
     private GridPane gridPane;
     private VBox statsPanel;
     private Timeline simulationTimeline;
+/**
+ * Początkowa metoda startowa aplikacji.
+ * Tworzy okno dialogowe do wprowadzenia parametrów symulacji, a następnie inicjalizuje GUI - siatkę i panel statystyk.
+ * @param stage Główne okno aplikacji.
+ */
+
 
     @Override
     public void start(Stage stage) {
@@ -151,6 +161,10 @@ public class CivBattler extends Application {
         stage.setTitle("Civilization Battle Simulator");
         stage.setScene(scene);
         stage.show();
+        /**Zapis obecnych statystyk symulacji do pliku.
+         * @param symulacja Obiekt symulacji, którego statystyki mają zostać zapisane.
+         *
+         */
     }
     public void saveSimulationToFile(Symulacja symulacja) {
         String fileName = "symulacja.txt";
@@ -176,6 +190,9 @@ public class CivBattler extends Application {
         }
     }
 
+    /**
+     * Zatrzymanie symulacji po wyjściu z aplikacji.
+     */
     @Override
     public void stop() {
         if (simulationTimeline != null) {
@@ -183,26 +200,13 @@ public class CivBattler extends Application {
         }
     }
 
-    //kolory cywilizacji
-    private String getCivilizationColor(int civId) {
-        return switch (civId) {
-            case 0 -> "#0044cc"; // Egipt
-            case 1 -> "#008800"; // Rzym
-            case 2 -> "#ff6600"; // Grecja
-            case 3 -> "#800080"; // Chiny
-            case 4 -> "#5c4033"; // Persja
-            case 5 -> "#cc0066"; // Majowie
-            case 6 -> "#008b8b"; // Wikingowie
-            case 7 -> "#b59f00"; // Japonia
-            case 8 -> "#555555"; // Polska
-            case 9 -> "#cc0000"; // Barbarzyńca
-            default -> "#000000"; // Domyślnie czarny
-        };
 
-
-    }
-
-
+    /**
+     * Tworzy siatkę planszy na podstawie parametrów podanych przez użytkownika.
+     * @param rows liczba wierszy w siatce
+     * @param cols liczba kolumn w siatce
+     * @param symulacja obiekt symulacji, który zawiera dane do wyświetlenia na planszy
+     */
     private void createGrid(int rows, int cols, Symulacja symulacja) {
         // czyszczenie starej siatki
         gridPane.getChildren().clear();
@@ -304,6 +308,10 @@ public class CivBattler extends Application {
         }
     }
 
+    /**
+     * Aktualizuje panel statystyk na podstawie danych z symulacji.
+     * @param symulacja obiekt symulacji, którego statystyki mają zostać wyświetlone.
+     */
 
     private void updateStatsPanel(Symulacja symulacja) {
         statsPanel.getChildren().clear();
@@ -399,6 +407,34 @@ public class CivBattler extends Application {
         }
     }
 
+    /**
+     * Zwraca kolor cywilizacji na podstawie jej ID.
+     * @param civId ID cywilizacji
+     * @return kolor w formacie HEX
+     */
+    //kolory cywilizacji
+    private String getCivilizationColor(int civId) {
+        return switch (civId) {
+            case 0 -> "#0044cc"; // Egipt
+            case 1 -> "#008800"; // Rzym
+            case 2 -> "#ff6600"; // Grecja
+            case 3 -> "#800080"; // Chiny
+            case 4 -> "#5c4033"; // Persja
+            case 5 -> "#cc0066"; // Majowie
+            case 6 -> "#008b8b"; // Wikingowie
+            case 7 -> "#b59f00"; // Japonia
+            case 8 -> "#555555"; // Polska
+            case 9 -> "#cc0000"; // Barbarzyńca
+            default -> "#000000"; // Domyślnie czarny
+        };
+
+
+    }
+
+    /**
+     * Główna metoda - uruchamia aplikację JavaFX.
+     * @param args argumenty wiersza poleceń
+     */
     public static void main(String[] args) {
         System.out.println("START");
         launch();
