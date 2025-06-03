@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
  * Klasa reprezentująca barbarzyńcę – wrogą jednostkę niezależną, należącą do ostatniej cywilizacji (o ID 9).
  * Barbarzyńcy atakują inne jednostki, poruszają się losowo lub w stronę przeciwników.
  */
-class Barbarzynca extends Jednostka {
+public class Barbarzynca extends Jednostka {
 
     /** Ścieżka do ikony barbarzyńcy. */
     private final String logoPath = "images/barbarzynca.png";

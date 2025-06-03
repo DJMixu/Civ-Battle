@@ -11,7 +11,7 @@ import java.util.List;
  * <p>
  * Przykładowe implementacje: {@link Osadnik}, {@link Wojownik}.
  */
-abstract class Jednostka extends Obiekt {
+public abstract class Jednostka extends Obiekt {
 
     /** Liczba punktów życia jednostki. Po osiągnięciu 0 jednostka ginie. */
     int zycie;

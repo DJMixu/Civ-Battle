@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * Klasa reprezentująca jednostkę Osadnik.
  * Osadnik odpowiada za zbieranie surowców i zakładanie osad.
  */
-class Osadnik extends Jednostka {
+public class Osadnik extends Jednostka {
     /**
      * Ścieżka do ikony osadnika.
      */
@@ -39,7 +39,7 @@ class Osadnik extends Jednostka {
     @Override
     public int ruch(Symulacja sim) {
         Cywilizacja civ = sim.listaCywilizacji[this.idCywilizacji];
-        
+
         // Jeśli osadnik nie żyje – usuń go z planszy
         if (!(this.zycie > 0))
             return smierc(sim.plansza, civ);

@@ -12,25 +12,39 @@ import java.util.Random;
  */
 public class Symulacja {
 
-    /** Tablica wszystkich cywilizacji biorących udział w symulacji. */
+    /**
+     * Tablica wszystkich cywilizacji biorących udział w symulacji.
+     */
     public Cywilizacja[] listaCywilizacji;
 
-    /** Wymiary planszy symulacji. */
+    /**
+     * Wymiary planszy symulacji.
+     */
     public int iSymulacjaX, iSymulacjaY;
 
-    /** Liczba cywilizacji w symulacji (bez barbarzyńców). */
+    /**
+     * Liczba cywilizacji w symulacji (bez barbarzyńców).
+     */
     public int iLiczbaCywilizacji;
 
-    /** Generator liczb losowych z ziarnem. */
+    /**
+     * Generator liczb losowych z ziarnem.
+     */
     public static Random ziarno;
 
-    /** Plansza, na której toczy się symulacja. */
+    /**
+     * Plansza, na której toczy się symulacja.
+     */
     public static Plansza plansza;
 
-    /** Licznik globalny służący do nadawania unikalnych ID obiektom. */
+    /**
+     * Licznik globalny służący do nadawania unikalnych ID obiektom.
+     */
     public static int iSymlacjaLicznikID;
 
-    /** Licznik aktualnej tury symulacji. */
+    /**
+     * Licznik aktualnej tury symulacji.
+     */
     public int licznikTur;
 
     // === KONSTRUKTORY ===
@@ -38,8 +52,8 @@ public class Symulacja {
     /**
      * Konstruktor uruchamiający symulację z określonymi parametrami.
      *
-     * @param pX szerokość planszy
-     * @param pY wysokość planszy
+     * @param pX    szerokość planszy
+     * @param pY    wysokość planszy
      * @param plCiv liczba cywilizacji
      * @param pSeed ziarno losowości (do powtarzalnych symulacji)
      */
@@ -52,6 +66,10 @@ public class Symulacja {
 
     /**
      * Konstruktor z domyślnym ziarnem.
+     *
+     * @param pX    szerokość planszy
+     * @param pY    wysokość planszy
+     * @param plCiv liczba cywilizacji
      */
     public Symulacja(int pX, int pY, int plCiv) {
         this(pX, pY, plCiv, "defaultSeed");
@@ -59,6 +77,9 @@ public class Symulacja {
 
     /**
      * Konstruktor z domyślną liczbą cywilizacji.
+     *
+     * @param pX szerokość planszy
+     * @param pY wysokość planszy
      */
     public Symulacja(int pX, int pY) {
         this(pX, pY, 3, "defaultSeed");
@@ -96,10 +117,10 @@ public class Symulacja {
     /**
      * Inicjuje nową symulację z określonymi parametrami.
      *
-     * @param pX szerokość planszy
-     * @param pY wysokość planszy
+     * @param pX            szerokość planszy
+     * @param pY            wysokość planszy
      * @param plCywilizacji liczba cywilizacji
-     * @param pSeed ziarno losowości
+     * @param pSeed         ziarno losowości
      * @return 0 jeśli inicjalizacja się powiodła
      */
     public int startSymulacji(int pX, int pY, int plCywilizacji, String pSeed) {
@@ -199,8 +220,8 @@ public class Symulacja {
     /**
      * Zwraca listę obiektów w zadanym zasięgu od podanego punktu.
      *
-     * @param punkt punkt odniesienia
-     * @param zasieg maksymalna odległość
+     * @param punkt   punkt odniesienia
+     * @param zasieg  maksymalna odległość
      * @param plansza plansza do przeszukania
      * @return lista znalezionych obiektów w zasięgu
      */

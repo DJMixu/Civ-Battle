@@ -10,7 +10,7 @@ import java.util.List;
  * Przechowuje informacje o zasobach, jednostkach oraz osadach należących do danej cywilizacji.
  * Każda cywilizacja posiada unikalny identyfikator oraz nazwę.
  */
-class Cywilizacja {
+public class Cywilizacja {
 
     /** Unikalny identyfikator cywilizacji. */
     public int idCywilizacji;

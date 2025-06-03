@@ -9,7 +9,7 @@ import java.awt.*;
  * Klasa ta może być dziedziczona przez bardziej wyspecjalizowane typy,
  * takie jak {@link Jednostka}, {@link Surowiec}, {@link Osada} itp.
  */
-class Obiekt {
+public class Obiekt {
 
     /** Unikalny identyfikator obiektu w symulacji. */
     int id;

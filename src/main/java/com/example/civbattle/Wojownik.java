@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
  * Wojownik porusza się po planszy, atakuje wrogów w sąsiedztwie oraz dąży do najbliższych przeciwników.
  * Jeśli nie ma celu, porusza się losowo. W przypadku śmierci zostaje usunięty z gry.
  */
-class Wojownik extends Jednostka {
+public class Wojownik extends Jednostka {
 
     /** Ścieżka do ikony reprezentującej wojownika. */
     private final String logoPath = "images/wojownik.png";
